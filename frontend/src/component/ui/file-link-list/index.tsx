@@ -2,10 +2,9 @@ import { Button } from '@mui/material'
 import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 import FileCopyIcon from '@mui/icons-material/FileCopy';
-import { IFAQFile } from 'models/IFAQ';
 
 interface FileLinkListProps{
-    files:IFAQFile[]
+    files:{name:string, file:string}[]
 }
 
 const FileLinkList:FC<FileLinkListProps> = ({files}) => {
