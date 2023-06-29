@@ -18,7 +18,7 @@ class Board(models.Model):
 
 class Members(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь')
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='members')
     is_owner = models.BooleanField(default=False)
 
     def __str__(self) -> str:
