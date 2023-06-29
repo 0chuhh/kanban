@@ -5,11 +5,11 @@ class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)
     username = serializers.CharField(max_length=100, write_only=True)
     password = serializers.CharField(max_length=100, write_only=True)
-    first_name = serializers.CharField(max_length=100)
-    middle_name = serializers.CharField(max_length=100, required=False)
-    last_name = serializers.CharField(max_length=100)
-    avatar = serializers.ImageField(required=False)
-    full_name = serializers.ReadOnlyField()
+    firstname = serializers.CharField(max_length=100, source='first_name')
+    middlename = serializers.CharField(max_length=100, required=False, source='middle_name')
+    lastname = serializers.CharField(max_length=100, source='last_name')
+    avatar = serializers.ImageField(required=False, )
+    fullname = serializers.ReadOnlyField(source='full_name')
     class Meta:
         model = User
         fields = '__all__'

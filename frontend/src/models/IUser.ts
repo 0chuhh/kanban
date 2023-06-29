@@ -3,6 +3,9 @@ interface IRole {
 }
 export interface IUser {
     username?: string;
+    firstname:string;
+    middlename:string;
+    lastname:string;
     fullname:string;
     email?: string;
     token?: string;
