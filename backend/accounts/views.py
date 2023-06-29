@@ -11,11 +11,14 @@ from .serializers import UserSerializer
 class UsersView(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
+    """
+    me action response user by token in request
+    """
     @action(detail=False, methods=['get'])
     def me(self, request, *args, **kwargs):
         try:
             user = request.user
+            print(user.avatar)
             return Response({
                 'userId': user.pk,
                 'email': user.email,
@@ -24,6 +27,7 @@ class UsersView(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.Generi
                 'firstname':user.first_name,
                 'middlename':user.middle_name,
                 'lastname':user.last_name,
+                'avatar': user.avatar.url,
                 'fullname':user.full_name,
             })
 

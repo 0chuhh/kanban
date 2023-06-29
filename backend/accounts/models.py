@@ -6,7 +6,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100)
-    avatar = models.ImageField(upload_to='static/media/accounts/avatars/', blank=True, default='')
+    avatar = models.ImageField(upload_to='media/accounts/avatars/', blank=True, default='')
 
     @property
     def full_name(self):
