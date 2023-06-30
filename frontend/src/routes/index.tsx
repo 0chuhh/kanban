@@ -5,6 +5,7 @@ import Login from "pages/login";
 import Home from "pages/home";
 import NotFound from "pages/notFound";
 import StaffRoute from "./staff-route";
+import BoardDetails from "pages/board-details";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -13,6 +14,14 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <Home />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/board/:id"
+        element={
+          <PrivateRoute>
+            <BoardDetails />
           </PrivateRoute>
         }
       />

@@ -2,6 +2,7 @@ import { IBoard } from 'models/IBoard'
 import React, { useEffect, useState } from 'react'
 import api from 'services/api'
 import BoardItem from './boardItem'
+import { Link } from 'react-router-dom'
 
 const BoardList = () => {
   const [boards, setBoards] = useState<IBoard[]>([])

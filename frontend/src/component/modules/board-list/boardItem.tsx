@@ -2,13 +2,18 @@ import { Typography } from '@mui/material'
 import MembersList from 'component/ui/members-list'
 import { IBoard } from 'models/IBoard'
 import React, { FC } from 'react'
+import { useNavigate } from 'react-router'
 
 interface BoardItemProps {
     board:IBoard
 }
 const BoardItem:FC<BoardItemProps> = ({board}) => {
+    const navigate = useNavigate()
+    const onBoardClick = (id:number) => {
+        navigate(`/board/${id}`)
+    }
   return (
-    <div className='board'>
+    <div className='board' onClick={()=>onBoardClick(board.id)}>
         <Typography align='center'>
             {board.title}
         </Typography>
