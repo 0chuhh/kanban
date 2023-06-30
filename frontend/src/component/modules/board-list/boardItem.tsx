@@ -27,8 +27,6 @@ const BoardItem:FC<BoardItemProps> = ({board}) => {
             boxSizing:'border-box'
         }}>
             <Typography>{board.description}</Typography>
-            
-            
             <MembersList members={board.members}/>
         </div>
     </div>
