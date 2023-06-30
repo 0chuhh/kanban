@@ -1,4 +1,5 @@
-import { Avatar, AvatarGroup, Tooltip, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
+import MembersList from 'component/ui/members-list'
 import { IBoard } from 'models/IBoard'
 import React, { FC } from 'react'
 
@@ -21,24 +22,9 @@ const BoardItem:FC<BoardItemProps> = ({board}) => {
             boxSizing:'border-box'
         }}>
             <Typography>{board.description}</Typography>
-            <Tooltip title='sss' enterDelay={600} arrow>
-            <AvatarGroup max={5} classes={{
-                avatar:'members-avatar'
-            }}>
-            {
-            board?.members?.map(member=>{
-                console.log(member.is_owner)
-                return(
-                    <Avatar style={{
-                    }} src={member.user.avatar}>{member.user.lastname[0].toUpperCase()}{member.user.firstname[0].toUpperCase()} </Avatar>
-                )
-            }
-                )
-        }
-            </AvatarGroup>
-            </Tooltip>
             
-        
+            
+            <MembersList members={board.members}/>
         </div>
     </div>
   )
