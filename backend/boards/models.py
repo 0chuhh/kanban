@@ -58,7 +58,7 @@ class Column(models.Model):
 
 
 class Task(models.Model):
-    column = models.ForeignKey(Column, on_delete=models.CASCADE)
+    column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
     date_created = models.DateField(auto_now=True)
