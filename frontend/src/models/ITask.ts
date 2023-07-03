@@ -2,6 +2,7 @@ import { DateString } from "types/date";
 import { IColumn } from "./IColumn";
 
 export interface ITask {
+    id:number;
     column:IColumn;
     title: string,
     description: string,

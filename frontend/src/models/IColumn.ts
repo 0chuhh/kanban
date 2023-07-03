@@ -5,7 +5,7 @@ type HEX = `#${string}`;
 
 export interface IColumn {
     id:number,
-    tasks:ITask,
+    tasks:ITask[],
     title:string,
     color:HEX,
     position:number;
