@@ -18,7 +18,7 @@ const Column:FC<ColumnProps> = ({column}) => {
       transition,
       transform,
       isDragging,
-  } = useSortable({ id: column.id, data:{type:'container'} })
+  } = useSortable({ id: column.position, data:{type:'container'} })
 
   const style = {
       transition,
@@ -27,16 +27,16 @@ const Column:FC<ColumnProps> = ({column}) => {
   }
   return (
     <div ref={setNodeRef} style={style}>
-      <div className='column'>
-        <div className='column-head'  {...attributes} {...listeners} style={{backgroundColor:column.color, color:contrastColor}}>{column.title}</div>
+      <div className='column'  {...attributes}>
+        <div className='column-head'  {...listeners} style={{backgroundColor:column.color, color:contrastColor}}>{column.title}</div>
         <div className="items" style={{
           height:'100%',
           width:'100%',
-          marginTop:'50px'
+          paddingTop:'50px'
         }}>
-          <SortableContext strategy={verticalListSortingStrategy} items={column.tasks.map(task=>`task ${column.id} ${task.id}`)}>
+          <SortableContext strategy={verticalListSortingStrategy} items={column.tasks.map(task=>`task ${column.id} ${task.position}`)}>
             {
-              column.tasks.map(task=><Task key={`task ${column.id} ${task.id}`} columnId={column.id} task={task}/>)
+              column.tasks.map(task=><Task key={`task ${column.id} ${task.position}`} columnId={column.id} task={task}/>)
             }
           </SortableContext>
         </div>
