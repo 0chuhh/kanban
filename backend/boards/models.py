@@ -45,7 +45,7 @@ class Column(models.Model):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     color = ColorField(default='#FF0000')
-    position = models.IntegerField()
+    position = models.IntegerField(unique=True)
     date_created = models.DateField(auto_now=True)
     default_task_status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True, blank=True)
 

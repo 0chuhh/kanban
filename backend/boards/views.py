@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework import permissions, viewsets, generics, mixins
 
 from .permissions import IsOwnerOrAdmin
-from .models import Board, Column
-from .serializers import BoardSerializer, ColumnSerializer
+from .models import Board, Column, Task
+from .serializers import BoardSerializer, ColumnSerializer, TaskSerializer
 from rest_framework.response import Response
 
 class BoardView(viewsets.ModelViewSet):
@@ -27,4 +27,10 @@ class ColumnView(viewsets.ViewSet):
         queryset = Column.objects.filter(board__id=pk)
         serializer = ColumnSerializer(queryset, many=True)
         return Response(serializer.data)
+    
+class TaskView(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class=TaskSerializer
+
+
 # Create your views here.
