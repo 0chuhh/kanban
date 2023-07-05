@@ -4,16 +4,12 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import api from "services/api";
 import {
-  Active,
   DndContext,
   DragEndEvent,
   DragOverEvent,
   DragOverlay,
   DragStartEvent,
-  KeyboardSensor,
-  Over,
   PointerSensor,
-  closestCenter,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -21,72 +17,56 @@ import {
   SortableContext,
   arrayMove,
   horizontalListSortingStrategy,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import Column from "./column";
-import { Arguments } from "@dnd-kit/core/dist/components/Accessibility/types";
 import { ITask } from "models/ITask";
 import Task from "./task";
-const Item:FC<{id:number}>=({id})=> {
 
-  const style = {
-    width: "100%",
-    height: 50,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "1px solid black",
-    margin: "10px 0",
-    background: "white"
-  };
-
-  return <div style={style}>{id}</div>;
-}
 const BoardDetails = () => {
   const id = useParams().id;
   const [columns, setColumns] = useState<IColumn[]>([]);
-  const [activeId, setActiveId] = useState<{
-    id: number;
-    type: "container" | "task";
-  }>();
   const [selectedColumn, setSelectedColumn] = useState<IColumn>();
   const [selectedTask, setSelectedTask] = useState<ITask>();
   const columnIds = useMemo(
-    () => columns.map((column) => column.position),
+    () => columns.map((column) => column.title),
     [columns]
   );
   const getColumnsByBoardId = async (id: string) => {
     const columns: IColumn[] = await api.columns.getColumnsByBoard(id);
     setColumns(columns);
   };
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const sensors = useSensors(useSensor(PointerSensor));
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (selectedColumn && selectedTask) {
-      if (typeof over?.id === "string" && typeof active.id === "string") {
-        const overId = over.id.split(" ")[2];
-        const activeId = active.id.split(" ")[2];
+      //====if dropped task====//
+      //*
+      if (typeof over?.id !== "string" && typeof active.id !== "string") {
+        const activeColumnID = findColumn(active.id);
+        const overColumnID = findColumn(over?.id);
+        const activeColumn = columns.find((c) => c.id === activeColumnID);
+        const overColumn = columns.find((c) => c.id === overColumnID);
 
-        if (active.id !== over.id) {
+        let activeIndex = activeColumn?.tasks.findIndex(
+          (t) => t.id === active.id
+        );
+
+        let overIndex = overColumn?.tasks.findIndex((t) => t.id === over?.id);
+
+        if (overIndex === -1) overIndex = overColumn?.tasks.length;
+
+        if (active.id !== over?.id && activeColumnID === overColumnID) {
           setColumns((prevColumns) =>
             prevColumns.map((column) => {
-              if (column.id === selectedColumn.id) {
-                const oldIndex = column.tasks.findIndex(
-                  (t) => t.id === Number(activeId)
-                );
-                const newIndex = column.tasks.findIndex(
-                  (t) => t.id === Number(overId)
-                );
+              if (column.id === overColumnID) {
                 return {
                   ...column,
-                  tasks: arrayMove(column.tasks, oldIndex, newIndex),
+                  tasks: arrayMove(
+                    column.tasks,
+                    Number(activeIndex),
+                    Number(overIndex)
+                  ),
                 };
               }
               return column;
@@ -94,18 +74,23 @@ const BoardDetails = () => {
           );
         }
       }
-    } else {
+      //*
+      //====if dropped task====//
+    }
+    //====if dropped column====//
+    //*
+    else {
       if (active.id !== over?.id) {
         setColumns((columns) => {
-          const oldIndex = columns?.findIndex(
-            (c) => c.id === Number(active.id)
-          );
-          const newIndex = columns?.findIndex((c) => c.id === Number(over?.id));
+          const oldIndex = columns?.findIndex((c) => c.title === active.id);
+          const newIndex = columns?.findIndex((c) => c.title === over?.id);
 
           return arrayMove(columns, oldIndex, newIndex);
         });
       }
     }
+    //*
+    //====if dropped column====//
   }
 
   // const defaultAnnouncements = {
@@ -139,36 +124,44 @@ const BoardDetails = () => {
   //     );
   //     return "";
   //   },
-  // };\
+  // };
 
-  
+  const findColumn = (id: string | number | undefined) => {
+    //====if column id in params===//
+    if (typeof id === "string") {
+      return columns.find((c) => c.title === id)?.id;
+    }
+
+    //====if task id in params===//
+    else if (typeof id === "number") {
+      return columns.find((c) => c.tasks.find((t) => t.id === id))?.id;
+    }
+  };
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event;
     const { id } = active;
 
-    setActiveId({
-      type: "container",
-      id: Number(id),
-    });
-
-    //==========if column=============//
+    //==========if dragging column=============//
+    //*
     if (typeof id === "number") {
-      setSelectedTask(undefined);
-      setSelectedColumn(columns.find((c) => c.position === id));
-    }
-    //==========if task=============//
-
-    if (typeof id === "string") {
-      const columnId = id.split(" ")[1];
-      setSelectedColumn(columns.find((c) => c.id === Number(columnId)));
-      const taskId = id.split(" ")[2];
-      setSelectedTask(
-        columns
-          .find((c) => c.id === Number(columnId))
-          ?.tasks.find((t) => t.id === Number(taskId))
+      var tempSelectedColumn = columns.find((c) =>
+        c.tasks.find((t) => t.id === id)
       );
+      setSelectedTask(tempSelectedColumn?.tasks.find((t) => t.id === id));
+      setSelectedColumn(tempSelectedColumn);
     }
+    //*
+    //==========if dragging column=============//
+
+    //==========if dragging task=============//
+    //*
+    if (typeof id === "string") {
+      setSelectedColumn(columns.find((c) => c.title === id));
+      setSelectedTask(undefined);
+    }
+    //*
+    //==========if dragging task=============//
   }
 
   function handleDragOver(event: DragOverEvent) {
@@ -177,140 +170,62 @@ const BoardDetails = () => {
     const overId = over?.id;
     const activeId = active.id;
 
-    console.log(overId, active.id);
+    const activeColumnID = findColumn(activeId);
+    const overColumnID = findColumn(overId);
 
-    //==========if task hovered task=============//
-    //*
-    if (typeof overId === "string" && typeof activeId === "string") {
-      const activeColumnId = Number(activeId.split(" ")[1]); //====dragging task from this column====//
-      const activeTaskID = Number(activeId.split(" ")[2]); //====draggable task====//
+    if (!activeColumnID || !overColumnID || activeColumnID === overColumnID)
+      return;
 
-      const overColumnID = Number(overId.split(" ")[1]); //====hovered column id====//
+    if (typeof overId !== "number" && typeof activeId !== "number") return;
 
-      const overTaskID = Number(overId.split(" ")[2]); //====hovered task ID====//
+    const activeColumn = columns.find((c) => c.id === activeColumnID);
+    const overColumn = columns.find((c) => c.id === overColumnID);
 
-      //============if dragging in the same column and draggable task is not hovered task==============//
-      //*
-      if (
-        selectedColumn?.id === overColumnID &&
-        overTaskID !== activeTaskID
-      ) {
-        setColumns((prevColumns) =>
-          prevColumns.map((column) => {
-            if (column.id === selectedColumn?.id) {
-              const oldIndex = column.tasks.findIndex(
-                (t) => t.id === activeTaskID
-              );
-              const newIndex = column.tasks.findIndex(
-                (t) => t.id === overTaskID
-              );
-              return {
-                ...column,
-                tasks: arrayMove(column.tasks, oldIndex, newIndex),
-              };
-            }
-            return column;
-          })
-          
-        );
-       
-      }
-      //*
-      //============if dragging in the same column and draggable task is not hovered task==============//
+    const activeIndex = activeColumn?.tasks.findIndex((t) => t.id === activeId);
+    let overIndex = overColumn?.tasks.findIndex((t) => t.id === overId);
 
-      if(selectedColumn?.id !== overColumnID){
-        console.log(over?.id, active.id , 'over')
-        let tempSelectedColumn:IColumn
+    if (overIndex === -1) overIndex = overColumn?.tasks.length;
 
-        if(selectedColumn && selectedTask){
-          setColumns((prevColumns) =>
-          prevColumns.map((column) => {
-            if (column.id === activeColumnId) {
-              return {
-                ...column,
-                tasks: column.tasks.filter((t) => t.id !== activeTaskID),
-              };
-            }
-            if(column.id === overColumnID){
-              console.log(column.tasks.slice(0, overTaskID-1),column.tasks.slice(overTaskID-1, column.tasks.length))
-              tempSelectedColumn = {
-                ...column,
-                tasks:[
-                  ...column.tasks.filter(t=>t.id!==selectedTask?.id).slice(0, overTaskID-1), 
-                  selectedTask,
-                  ...column.tasks.filter(t=>t.id!==selectedTask?.id).slice(overTaskID-1, column.tasks.length)
-                ]
-              }
-              return tempSelectedColumn
-            }
-            // setTimeout(()=>{
-              // setSelectedColumn(tempSelectedColumn)
-            //   setSelectedTask(tempSelectedColumn?.tasks.find(t=>t.position === activeTaskPosition))
-            // },300)
+    if (activeIndex !== undefined && overIndex !== undefined) {
+      setColumns((prevColumns) =>
+        prevColumns.map((column) => {
+          //===remove task from active column====//
+          if (column.id === activeColumnID) {
+            return {
+              ...column,
+              tasks: column.tasks.filter((t) => t.id !== activeId),
+            };
+          }
 
-            return column;
-          }))
-          
-          
-         
-        }
-        
-      }
+          //===add task to hovered column in hovered position====//
+          if (column.id === overColumnID && activeColumn?.tasks) {
+            return {
+              ...column,
+              tasks: [
+                ...column.tasks.slice(0, Number(overIndex)),
+                activeColumn.tasks[activeIndex],
+                ...column.tasks.slice(
+                  Number(overIndex),
+                  overColumn?.tasks.length
+                ),
+              ],
+            };
+          }
+          return column;
+        })
+      );
     }
-    //*
-    //==========if task hovered task=============//
-
-    //==========if task hovered column=============//
-    //*
-    if (typeof overId === "number" && selectedTask) {
-      //==========if task hovered same column=============//
-      //*
-      if (selectedColumn?.position === overId) {
-
-      } else {
-        
-        // setColumns((prevColumns) =>
-        //   prevColumns.map((column) => {
-        //     if (column.id === selectedColumn?.id) {
-        //       return {
-        //         ...column,
-        //         tasks: column.tasks.filter((t) => t.id !== selectedTask?.id),
-        //       };
-        //     }
-        //     if(column.id === overId){
-        //       return{
-        //         ...column,
-        //         tasks:[
-        //           ...column.tasks.slice(0, selectedTask.position), 
-        //           selectedTask]
-        //       }
-        //     }
-        //     return column;
-        //   })
-        // );
-      }
-      //*
-      //==========if task hovered same column=============//
-    }
-    //*
-    //==========if task hovered column=============//
-
-    // if (active.id !== over?.id && typeof overId === 'number' && overId !== selectedColumn?.id){
-    //   setColumns(prevColumns=>prevColumns.map(column=>{
-    //     if(column.id === selectedColumn?.id){
-    //       return {...column, tasks:column.tasks.filter(t=>t.id !== selectedTask?.id)}
-    //     }
-    //     return column
-    //   }))
-    // }
   }
+
   useEffect(() => {
     if (id) getColumnsByBoardId(id);
   }, [id]);
+
+  
   return (
     <DndContext
       // accessibility={{ announcements: defaultAnnouncements }}
-      // onDragEnd={handleDragEnd}
+      onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       sensors={sensors}
@@ -324,14 +239,13 @@ const BoardDetails = () => {
           style={{ gap: "10px", height: "100%" }}
         >
           {columns.map((column) => (
-            <Column key={column.position} column={column} />
+            <Column key={column.title} column={column} />
           ))}
         </div>
       </SortableContext>
       <DragOverlay>
         {selectedTask && selectedColumn ? (
-          <Item id={selectedTask.id}
-          />
+          <Task columnId={selectedColumn.id} task={selectedTask} />
         ) : selectedColumn ? (
           <Column column={selectedColumn} />
         ) : null}
