@@ -16,7 +16,7 @@ const Task:FC<TaskProps> = ({task, columnId}) => {
         transition,
         transform,
         isDragging,
-    } = useSortable({ id: `task ${columnId} ${task.position}` })
+    } = useSortable({ id: `task ${columnId} ${task.id}` })
   
     const style = {
         transition,

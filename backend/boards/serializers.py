@@ -29,7 +29,13 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class ColumnSerializer(serializers.ModelSerializer):
-    tasks = TaskSerializer(many=True, read_only=True)
+    
+    tasks = serializers.SerializerMethodField()
+
+    def get_tasks(self, instance):
+        tasks = instance.tasks.all().order_by('position')
+        print('hui')
+        return TaskSerializer(tasks, many=True, read_only=True).data
     class Meta:
         model = Column
         fields = '__all__'

@@ -34,9 +34,9 @@ const Column:FC<ColumnProps> = ({column}) => {
           width:'100%',
           paddingTop:'50px'
         }}>
-          <SortableContext strategy={verticalListSortingStrategy} items={column.tasks.map(task=>`task ${column.id} ${task.position}`)}>
+          <SortableContext strategy={verticalListSortingStrategy} items={column.tasks.map(task=>`task ${column.id} ${task.id}`)}>
             {
-              column.tasks.map(task=><Task key={`task ${column.id} ${task.position}`} columnId={column.id} task={task}/>)
+              column.tasks.map(task=><Task key={`task ${column.id} ${task.id}`} columnId={column.id} task={task}/>)
             }
           </SortableContext>
         </div>
