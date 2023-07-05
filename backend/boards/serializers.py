@@ -34,7 +34,6 @@ class ColumnSerializer(serializers.ModelSerializer):
 
     def get_tasks(self, instance):
         tasks = instance.tasks.all().order_by('position')
-        print('hui')
         return TaskSerializer(tasks, many=True, read_only=True).data
     class Meta:
         model = Column

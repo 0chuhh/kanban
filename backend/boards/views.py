@@ -24,7 +24,7 @@ class BoardView(viewsets.ModelViewSet):
 class ColumnView(viewsets.ViewSet):
     
     def retrieve(self, request, pk=None):
-        queryset = Column.objects.filter(board__id=pk)
+        queryset = Column.objects.filter(board__id=pk).order_by('position')
         serializer = ColumnSerializer(queryset, many=True)
         return Response(serializer.data)
     
