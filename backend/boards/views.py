@@ -76,19 +76,16 @@ class TaskView(viewsets.ModelViewSet):
         else:
              if task_with_requested_position is not None:
                 if new_position < changeble_task.position:
-                    tasks_before_new_position = Task.objects.filter(column=new_column, position__lt=new_position)
+                    tasks_before_new_position = Task.objects.filter(column=changeble_task.column, position__lt=changeble_task.position)
                     for task in tasks_before_new_position:
                         task.position += 1
                         task.save()
                 if new_position > changeble_task.position:    
-                    tasks_after_previous_position = Task.objects.filter(column=changeble_task.column, position__gt=new_position)
+                    tasks_after_previous_position = Task.objects.filter(column=changeble_task.column, position__lte=new_position)
                     for task in tasks_after_previous_position:
                         task.position -= 1
                         task.save()
-                tasks_before_previous_position = Task.objects.filter(column=changeble_task.column, position__lt=changeble_task.position)
-                for task in tasks_before_previous_position:
-                    task.position += 1
-                    task.save()
+                
 
         print(changeble_task.column.pk, new_column.pk,changeble_task.column == new_column )
         changeble_task.column = new_column
