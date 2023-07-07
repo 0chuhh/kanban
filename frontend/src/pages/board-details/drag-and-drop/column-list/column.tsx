@@ -1,13 +1,12 @@
 import React, { FC, useMemo } from "react";
 import {
-  SortableContext,
   useSortable,
-  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { IColumn } from "models/IColumn";
 import { useContrastColor } from "hooks/useContrastColor";
-import Task from "./task";
+import Task from "./task-list/task";
+import TaskList from "./task-list";
 
 interface ColumnProps {
   column: IColumn;
@@ -29,7 +28,6 @@ const Column: FC<ColumnProps> = ({ column }) => {
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const taskIds = useMemo(() => column?.tasks?.map((t) => t.id), [column]);
 
   return (
     <div ref={setNodeRef} style={style}>
@@ -49,18 +47,11 @@ const Column: FC<ColumnProps> = ({ column }) => {
             paddingTop: "50px",
           }}
         >
-          <SortableContext
-            strategy={verticalListSortingStrategy}
-            items={taskIds}
-          >
-            {column.tasks.map((task) => (
-              <Task key={task.id} columnId={column.id} task={task} />
-            ))}
-          </SortableContext>
+          <TaskList tasks={column.tasks}/>
         </div>
       </div>
     </div>
   );
 };
 
-export default Column;
+export default React.memo(Column);

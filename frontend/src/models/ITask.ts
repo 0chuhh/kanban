@@ -3,7 +3,7 @@ import { IColumn } from "./IColumn";
 
 export interface ITask {
     id:number;
-    column:IColumn;
+    column:number;
     title: string,
     description: string,
     date_created:DateString;

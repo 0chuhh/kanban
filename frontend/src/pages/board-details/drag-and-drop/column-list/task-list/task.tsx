@@ -1,8 +1,9 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import IconCheckbox from "component/ui/icon-checkbox";
 import { ITask } from "models/ITask";
 import React, { FC } from "react";
-
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 interface TaskProps {
   task: ITask;
   columnId: number;
@@ -25,11 +26,13 @@ const Task: FC<TaskProps> = ({ task, columnId }) => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <div style={{ background: "red", padding: "30px", marginTop: "20px" }}>
-        {task.title}
+      <div className="task">
+        <span><IconCheckbox classes={{
+          root:'checkbox'
+        }} icon={<CheckCircleOutlineOutlinedIcon fontSize="small"/>}/><span>{task.title}</span></span>
       </div>
     </div>
   );
 };
 
-export default Task;
+export default React.memo(Task);
