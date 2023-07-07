@@ -129,6 +129,7 @@ const DragAndDrop = () => {
           return column;
         })
       );
+      changeTaskPosition(Number(selectedTask?.id), overColumnID, Number(overIndex))
     }
   }
 
@@ -167,6 +168,7 @@ const DragAndDrop = () => {
               return column;
             })
           );
+          changeTaskPosition(selectedTask.id, Number(overColumnID), Number(overIndex))
         }
       }
       //*
@@ -176,18 +178,27 @@ const DragAndDrop = () => {
     //*
     else {
       if (active.id !== over?.id) {
+        const oldIndex = columns?.findIndex((c) => c.title === active.id);
+        const newIndex = columns?.findIndex((c) => c.title === over?.id);
         setColumns((columns) => {
-          const oldIndex = columns?.findIndex((c) => c.title === active.id);
-          const newIndex = columns?.findIndex((c) => c.title === over?.id);
-
           return arrayMove(columns, oldIndex, newIndex);
         });
+        if(selectedColumn){
+            changeColumnPosition(selectedColumn?.id, newIndex)
+        }
       }
     }
     //*
     //====if dropped column====//
   }
 
+  const changeColumnPosition = async (id:string | number, position:number) => {
+    await api.columns.changeColumnPositionById(id, position)
+  }
+
+  const changeTaskPosition = async (id:string | number, columnId: string | number, position:number) => {
+    await api.tasks.changeTaskPositionById(id, columnId, position)
+  }
   useEffect(() => {
     if (id) getColumnsByBoardId(id);
   }, [id]);
