@@ -1,0 +1,55 @@
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Black.otf);
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Heavy.otf);
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Bold.otf);
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Semibold.otf);
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Medium.otf);
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Regular.otf);
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Light.otf);
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Ultralight.otf);
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: sf;
+    src: url(./assets/fonts/SF-Compact-Rounded-Thin.otf);
+    font-weight: 100;
+    font-style: normal;
+}
