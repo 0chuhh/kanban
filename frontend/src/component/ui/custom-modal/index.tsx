@@ -27,6 +27,7 @@ const CustomModal: FC<CustomModalProps> = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backdropFilter:'blur(10px)'
       }}
     >
       <Badge
@@ -34,7 +35,8 @@ const CustomModal: FC<CustomModalProps> = ({
           <IconButton
             onClick={handleClose}
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: "#ff4057",
+              color:'#000'
             }}
           >
             <CloseIcon fontSize="small" />
@@ -46,7 +48,8 @@ const CustomModal: FC<CustomModalProps> = ({
             top: "50%",
             left: "50%",
             minWidth: 400,
-            bgcolor: "background.paper",
+            bgcolor: "#ff4057",
+            color:"#fff",
             borderRadius: "10px",
             boxShadow: 24,
             p: 4,
