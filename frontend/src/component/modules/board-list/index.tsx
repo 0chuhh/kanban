@@ -15,9 +15,15 @@ const BoardList = () => {
     setBoards(Boards)
   }
 
-  const onCreateBoard=(board:IBoard)=>{
+  const onCreateBoard = async(title:string, description:string)=>{
+    const board: IBoard = await api.boards.postBoard(title, description);
     setBoards(prev=>[board, ...prev])
     ref.current?.closeModal()
+  }
+
+  const onDeleteBoard = async (id:number) => {
+    await api.boards.deleteBoardById(id)
+    setBoards(prev=>prev.filter(b=>b.id !== id))
   }
   useEffect(()=>{
     getBoards()
@@ -33,7 +39,7 @@ const BoardList = () => {
     </div>
       {
         boards.map(board=>
-            <BoardItem board={board}/>
+            <BoardItem onDelete={onDeleteBoard} board={board}/>
           )
       }
     </div>

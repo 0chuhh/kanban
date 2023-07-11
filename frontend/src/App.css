@@ -33,10 +33,12 @@
 .d-flex{
   display: flex;
 }
-.h-center, .v-center, .d-column{
+.h-center, .v-center, .d-column, .jc-between{
   display: flex;
 }
-
+.jc-between{
+  justify-content: space-between;
+}
 .h-center{
   justify-content: center;
 }

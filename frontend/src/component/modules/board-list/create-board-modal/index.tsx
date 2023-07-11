@@ -5,12 +5,9 @@ import Gap from "component/ui/gap";
 import { IBoard } from "models/IBoard";
 import React, {
   forwardRef,
-  FC,
   useState,
   useImperativeHandle,
-  Ref,
 } from "react";
-import api from "services/api";
 
 export interface CanOpenCreateBoardModal {
   openModal(): void;
@@ -18,7 +15,7 @@ export interface CanOpenCreateBoardModal {
 }
 
 interface CreateBoardModalProps {
-  onCreate?: (board:IBoard) => void;
+  onCreate?: (title:string,description:string) => void;
 }
 
 const CreateBoardModal = forwardRef<
@@ -46,8 +43,7 @@ const CreateBoardModal = forwardRef<
     event
   ) => {
     event.preventDefault();
-    const board: IBoard = await api.boards.postBoard(title, description);
-    onCreate && onCreate(board)
+    onCreate && onCreate(title,description)
   };
 
   return (
