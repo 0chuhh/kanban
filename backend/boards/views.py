@@ -2,15 +2,33 @@ from django.shortcuts import render
 from rest_framework import permissions, viewsets, generics, mixins
 
 from .permissions import IsOwnerOrAdmin
-from .models import Board, Column, Task
+from .models import Board, Column, Task, Members
 from .serializers import BoardSerializer, ColumnSerializer, TaskSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
+
 class BoardView(viewsets.ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        serializer = BoardSerializer(data=data)
+        if serializer.is_valid():
+            board = Board(**serializer.data, owner=request.user)
+            board.save()
+            member = Members(user=request.user, board=board)
+            member.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def list(self, request, *args, **kwargs):
+        userMemberIn = Members.objects.filter(user=request.user)
+        serializer = BoardSerializer([member.board for member in userMemberIn], many=True)
+        return Response(serializer.data)    
 
     def get_permissions(self):
         if self.action == 'delete':

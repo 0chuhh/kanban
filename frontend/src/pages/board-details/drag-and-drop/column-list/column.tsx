@@ -42,7 +42,6 @@ const Column: FC<ColumnProps> = ({ column }) => {
         <div
           className="items"
           style={{
-            height: "100%",
             width: "100%",
             paddingTop: "50px",
           }}

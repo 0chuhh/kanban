@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User
 
 class UserSerializer(serializers.Serializer):
+    userId = serializers.IntegerField(read_only=True, source='pk')
     email = serializers.EmailField(required=False)
     username = serializers.CharField(max_length=100, write_only=True)
     password = serializers.CharField(max_length=100, write_only=True)

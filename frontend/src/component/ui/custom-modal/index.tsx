@@ -44,16 +44,17 @@ const CustomModal: FC<CustomModalProps> = ({
         }
       >
         <Box
+        
           sx={{
             top: "50%",
             left: "50%",
-            minWidth: 400,
             bgcolor: "#ff4057",
             color:"#fff",
             borderRadius: "10px",
             boxShadow: 24,
             p: 4,
           }}
+          className='modal'
         >
           {children}
         </Box>

@@ -8,6 +8,12 @@ const endpoints = {
     postBoard: (title:string, description:string)=>axios.post<IBoard>('boards/',{
         title,
         description
-    }).then(response=>response.data)
+    }).then(response=>response.data),
+    changeBoardById: (board:IBoard)=>axios.patch<IBoard>(`boards/${board.id}/`,{
+        title:board.title,
+        description:board.description,
+        members:board.members,
+    }).then(response=>response.data),
+
 }
 export default endpoints

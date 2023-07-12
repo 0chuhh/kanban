@@ -16,10 +16,19 @@
   background-color: #f90;
   border-radius: 50px;
 }
+
 .container{
   padding: 115px 70px 0;
 }
 
+.modal{
+  width: 400px;
+}
+@media (max-width:992px) {
+  .modal{
+    width: 100%;
+  }
+}
 .tab-secondary-text-color{
   color:#fff !important
 }
@@ -73,7 +82,10 @@
   border-radius: 20px;
   transition: all 0.5s ease;
 }
+.board-wrapper {
+  max-width: 400px;
 
+}
 .create-board{
   cursor: pointer;
   border: dashed 8px #ff4057;
@@ -108,9 +120,7 @@
   .container{
     padding: 115px 15px 0;
   }
-  .board{
-    max-width: none;
-  }
+  
 }
 @media(hover:hover){
   .board:hover{

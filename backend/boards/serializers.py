@@ -11,6 +11,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
 
 class BoardSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(required=False,)
     members = MemberSerializer(many=True, read_only=True)
     class Meta:
         model = Board

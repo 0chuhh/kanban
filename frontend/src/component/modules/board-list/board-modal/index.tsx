@@ -9,24 +9,33 @@ import React, {
   useImperativeHandle,
 } from "react";
 
-export interface CanOpenCreateBoardModal {
+export interface CanOpenBoardModal {
   openModal(): void;
   closeModal(): void;
 }
 
-interface CreateBoardModalProps {
-  onCreate?: (title:string,description:string) => void;
+interface BoardModalProps {
+  onSubmit?: (title:string,description:string) => void;
+  method: 'create',
+}
+
+interface EditBoardModalProps {
+  onSubmit?: (title:string,description:string) => void;
+  method: 'edit',
+  title:string,
+  description:string
 }
 
 const CreateBoardModal = forwardRef<
-  CanOpenCreateBoardModal,
-  CreateBoardModalProps
->(({ onCreate }, ref) => {
+  CanOpenBoardModal,
+  BoardModalProps | EditBoardModalProps
+>((props, ref) => {
   const [open, setOpen] = useState<boolean>(false);
+  const initTitle = props.method === 'edit'? props.title:'';
+  const initDescription = props.method === 'edit'? props.description:'';
 
-  const [title, setTitle] = useState<string>("");
-
-  const [description, setDescription] = useState<string>("");
+  const [titleValue, setTitleValue] = useState<string>(initTitle);
+  const [descriptionValue, setDescriptionValue] = useState<string>(initDescription);
 
   useImperativeHandle(ref, () => ({
     openModal() {
@@ -39,27 +48,31 @@ const CreateBoardModal = forwardRef<
 
   const closeModal = () => setOpen(false);
 
-  const createBoard: React.FormEventHandler<HTMLFormElement> = async (
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     event.preventDefault();
-    onCreate && onCreate(title,description)
+    props.onSubmit && props.onSubmit(titleValue,descriptionValue)
+    if(props.method === 'create'){
+      setTitleValue('')
+      setDescriptionValue('')
+    }
   };
 
   return (
     <CustomModal open={open} handleClose={closeModal}>
-      <form onSubmit={createBoard} className="d-column">
+      <form onSubmit={onSubmit} className="d-column">
         <CustomInput
           required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={titleValue}
+          onChange={(e) => setTitleValue(e.target.value)}
           label="Название"
         />
         <Gap />
         <CustomInput
           required
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={descriptionValue}
+          onChange={(e) => setDescriptionValue(e.target.value)}
           label="Описание"
           multiline
         />
@@ -72,7 +85,7 @@ const CreateBoardModal = forwardRef<
           }}
           type="submit"
         >
-          Создать
+          {props.method === 'create'? 'Создать': 'Сохранить'}
         </Button>
       </form>
     </CustomModal>

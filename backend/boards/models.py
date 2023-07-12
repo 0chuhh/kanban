@@ -7,6 +7,8 @@ class Board(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000, blank=True)
     date_created = models.DateField(auto_now=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='создатель')
+    
 
     def __str__(self) -> str:
         return self.title
@@ -19,7 +21,6 @@ class Board(models.Model):
 class Members(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь')
     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='members')
-    is_owner = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.user.full_name
@@ -68,6 +69,7 @@ class Task(models.Model):
     position = models.IntegerField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
     performers = models.ManyToManyField(Members, blank=True)
+
 
     @property
     def is_overdue(self):
