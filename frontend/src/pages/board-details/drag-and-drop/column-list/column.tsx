@@ -26,6 +26,7 @@ const Column: FC<ColumnProps> = ({ column }) => {
     transition,
     transform: CSS.Transform.toString(transform),
     opacity: isDragging ? 0.5 : 1,
+    cursor: isDragging? 'grabbing':'grab'
   };
 
 
@@ -34,8 +35,13 @@ const Column: FC<ColumnProps> = ({ column }) => {
       <div className="column" {...attributes}>
         <div
           className="column-head"
+          onClick={(e)=>{
+            e.stopPropagation()
+            e.preventDefault()
+            
+          }}
           {...listeners}
-          style={{ backgroundColor: column.color, color: contrastColor }}
+          style={{ backgroundColor: column.color, color: contrastColor,  }}
         >
           {column.title}
         </div>

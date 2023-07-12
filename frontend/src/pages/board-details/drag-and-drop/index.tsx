@@ -184,6 +184,7 @@ const DragAndDrop = () => {
           return arrayMove(columns, oldIndex, newIndex);
         });
         if(selectedColumn){
+            console.log(selectedColumn?.id, newIndex)
             changeColumnPosition(selectedColumn?.id, newIndex)
         }
       }
