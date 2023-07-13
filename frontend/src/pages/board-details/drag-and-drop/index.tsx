@@ -23,7 +23,7 @@ import ColumnList from "./column-list";
 import Overlay from "./overlay";
 
 const DragAndDrop = () => {
-  const id = useParams().id;
+  const id = useParams<string>().id;
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -185,7 +185,7 @@ const DragAndDrop = () => {
         });
         if(selectedColumn){
             console.log(selectedColumn?.id, newIndex)
-            changeColumnPosition(selectedColumn?.id, newIndex)
+            changeColumnPosition(Number(selectedColumn?.id), newIndex)
         }
       }
     }
@@ -212,7 +212,7 @@ const DragAndDrop = () => {
       onDragOver={handleDragOver}
       sensors={sensors}
     >
-      <ColumnList columns={columns} />
+      <ColumnList onCreateColumn={(column)=>setColumns(prev=>[...prev, column])} boardId={id} columns={columns} />
       <Overlay selectedColumn={selectedColumn} selectedTask={selectedTask} />
     </DndContext>
   );

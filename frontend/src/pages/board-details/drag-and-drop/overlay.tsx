@@ -13,7 +13,7 @@ const Overlay: FC<OverlayProps> = ({ selectedColumn, selectedTask }) => {
   return (
     <DragOverlay>
       {selectedTask && selectedColumn ? (
-        <Task columnId={selectedColumn.id} task={selectedTask} />
+        <Task columnId={Number(selectedColumn.id)} task={selectedTask} />
       ) : selectedColumn ? (
         <Column column={selectedColumn} />
       ) : null}

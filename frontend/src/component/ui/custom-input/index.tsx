@@ -7,22 +7,22 @@ import React, {FC} from "react";
 
 const CssTextField = styled(TextField)({
   '& label':{
-    color:'#000'
+    color:'#fff'
   },
   '& label.Mui-focused': {
-    color: '#000',
+    color: '#fff',
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: '#000',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      color:'#000',
+      color:'#fff',
       borderColor: '#000',
 
     },
     '&:hover fieldset': {
-      color:'#000',
+      color:'#fff',
       borderColor: '#000',
     },
     '&.Mui-focused fieldset': {
@@ -39,9 +39,10 @@ interface CustomInputProps  extends Omit<TextFieldProps, 'variant'>{
     fullWidth?: boolean,
     maxLength?: number,
     variant?:TextFieldVariants,
+    theme?:'dark'|'light'
 }
 
-const CustomInput:FC<CustomInputProps> = ({maxLength, variant = 'outlined',...restProps}) => {
+const CustomInput:FC<CustomInputProps> = ({theme, maxLength, variant = 'outlined',...restProps}) => {
   return (
     <CssTextField
       {...restProps}
@@ -50,8 +51,8 @@ const CustomInput:FC<CustomInputProps> = ({maxLength, variant = 'outlined',...re
         color: "#fff",
       }}
       
-      
-      inputProps={{ maxLength: maxLength ? maxLength : 500, }}
+      InputProps={{style:{color:'fff'}}}
+      inputProps={{ maxLength: maxLength ? maxLength : 500, style:{color:'#fff'} }}
     />
   );
 }

@@ -49,10 +49,20 @@ class ColumnView(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
+        board = Board.objects.get(pk=data['board'])
         serializer = ColumnSerializer(data=data)
         if serializer.is_valid():
-            column = Column(**serializer.data)
+            serializer.data['board'] = board
+            column = Column(
+                title=serializer.data['title'],
+                color=serializer.data['color'],
+                position=serializer.data['position'],
+                board_id=serializer.data['board']
+            )
             column.save()
+            return Response({**serializer.data, 'id':column.id})
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+        
 
     @action(detail=True, methods=['patch'], url_path=r'swap')
     def swap_columns(self, request, pk=None):

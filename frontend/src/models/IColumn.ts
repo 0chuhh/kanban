@@ -1,15 +1,15 @@
 import { DateString } from "types/date";
 import { ITask } from "./ITask";
 
-type HEX = `#${string}`;
+export type HEX = `#${string}`;
 
 export interface IColumn {
-    id:number,
+    id?:number,
     tasks:ITask[],
     title:string,
-    color:HEX,
+    color:HEX | string,
     position:number;
-    date_created:DateString;
+    date_created?:DateString;
     board:number;
-    default_task_status:string;
+    default_task_status?:string;
 }

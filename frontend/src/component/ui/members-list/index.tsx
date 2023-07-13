@@ -19,12 +19,11 @@ const MembersList: FC<MembersListProps> = ({ members }) => {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
             {members?.map((member) => {
               return (
-                <Tooltip title={member.user?.fullname}>
+                <Tooltip key={member.user.username+'tooltip'} title={member.user?.fullname}>
                   <Avatar
                   
                     className="members-avatar"
-                    key={member.user?.fullname}
-                    style={{}}
+                    
                     src={member.user?.avatar}
                   >
                     {member.user?.lastname[0]?.toUpperCase()}
@@ -46,17 +45,15 @@ const MembersList: FC<MembersListProps> = ({ members }) => {
           avatar: "members-avatar",
         }}
       >
-        {members?.map((member) => {
-          return (
+        {members?.map((member) => 
             <Avatar
-              key={member.user?.fullname}
+              key={member.user.userId}
               src={member.user?.avatar}
             >
               {member.user?.lastname[0]?.toUpperCase()}
               {member.user?.firstname[0]?.toUpperCase()}{" "}
             </Avatar>
-          );
-        })}
+         )}
       </AvatarGroup>
     </Tooltip>
   );

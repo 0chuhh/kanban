@@ -6,6 +6,7 @@
 }
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -165,7 +166,7 @@
   
 }
 .column{
-  width: 280px;
+  min-width: 280px;
   height: 80vh;
   border-radius: 15px;
   background-color: #3a3a3a;
@@ -204,4 +205,8 @@
 
 .drawer{
   background:#252525 !important
+}
+
+.color-picker{
+  box-sizing: border-box !important;
 }

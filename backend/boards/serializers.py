@@ -31,11 +31,16 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class ColumnSerializer(serializers.ModelSerializer):
     
-    tasks = serializers.SerializerMethodField()
+    tasks = serializers.SerializerMethodField(read_only=True)
 
     def get_tasks(self, instance):
-        tasks = instance.tasks.all().order_by('position')
-        return TaskSerializer(tasks, many=True, read_only=True).data
+        try:
+            tasks = instance.tasks.all().order_by('position')
+            return TaskSerializer(tasks, many=True, read_only=True).data
+        except:
+            return
+    
+    
     class Meta:
         model = Column
         fields = '__all__'

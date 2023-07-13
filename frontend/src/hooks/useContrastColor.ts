@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { hexToRgb } from "services/HEXToRGB"
 
-function computeLuminence(hex: `#${string}`) {
+function computeLuminence(hex: string) {
     var { red, green, blue } = hexToRgb(hex);
 
     var colors = [red, green, blue];
@@ -18,14 +18,14 @@ function computeLuminence(hex: `#${string}`) {
     return luminence;
 }
 
-export const useContrastColor = (hex: `#${string}`) => {
+export const useContrastColor = (hex: string) => {
     const [contrastColor, setContrastColor] = useState<`#${string}`>()
 
     useEffect(() => {
         const luminence = computeLuminence(hex)
-        console.log(luminence)
+        console.log(luminence, hex)
 
-        if (luminence > 180.0) {
+        if (luminence > 160.0 || luminence === 0) {
             setContrastColor('#000')
         }
         else {

@@ -12,8 +12,7 @@ const CustomDrawer:FC<Omit<DrawerProps, 'anchor'>> = ({children, ...restProps}) 
           ...restProps.classes
         }}
       >
-        <Box sx={{width:450, }}>
-          {children}
+        <Box sx={{width:450, height:'100%', p:3, boxSizing:'border-box'}}>{children}
         </Box>
     </Drawer>
   )

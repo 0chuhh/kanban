@@ -56,7 +56,7 @@ const BoardList = () => {
         />
       </div>
       {boards.map((board) => (
-        <BoardItem onEdit={onEditBoard} onDelete={onDeleteBoard} board={board} />
+        <BoardItem key={board?.id} onEdit={onEditBoard} onDelete={onDeleteBoard} board={board} />
       ))}
     </div>
   );
