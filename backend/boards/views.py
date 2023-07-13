@@ -21,7 +21,7 @@ class BoardView(viewsets.ModelViewSet):
             board.save()
             member = Members(user=request.user, board=board)
             member.save()
-            return Response(status=status.HTTP_201_CREATED)
+            return Response({**serializer.data, 'id':board.pk},status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
 

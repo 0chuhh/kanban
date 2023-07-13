@@ -18,7 +18,7 @@
   border-radius: 50px;
 }
 
-.MuiButton-root{
+.add-column > .MuiButton-root{
   color: #fff !important;
   font-size: small;
 }
