@@ -18,8 +18,7 @@ class UsersView(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.Generi
     def me(self, request, *args, **kwargs):
         try:
             user = request.user
-            print(user.avatar)
-            return Response({
+            response = {
                 'userId': user.pk,
                 'email': user.email,
                 'isStaff':user.is_staff,
@@ -27,9 +26,14 @@ class UsersView(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.Generi
                 'firstname':user.first_name,
                 'middlename':user.middle_name,
                 'lastname':user.last_name,
-                'avatar': user.avatar.url,
                 'fullname':user.full_name,
-            })
+            }
+            try:
+                response['avatar'] = user.avatar.url,
+            except: 
+                pass
+            print(user.avatar)
+            return Response(response)
 
         except:
             return Response('Не авторизован',status=status.HTTP_401_UNAUTHORIZED)

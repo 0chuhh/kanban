@@ -67,6 +67,7 @@ const CreateBoardModal = forwardRef<
           value={titleValue}
           onChange={(e) => setTitleValue(e.target.value)}
           label="Название"
+          maxLength={100}
         />
         <Gap />
         <CustomInput
@@ -75,6 +76,7 @@ const CreateBoardModal = forwardRef<
           onChange={(e) => setDescriptionValue(e.target.value)}
           label="Описание"
           multiline
+          maxLength={1000}
         />
         <Gap />
         <Button

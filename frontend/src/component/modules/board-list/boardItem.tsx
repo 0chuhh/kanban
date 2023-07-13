@@ -92,7 +92,7 @@ const BoardItem: FC<BoardItemProps> = ({ board, onDelete, onEdit }) => {
             </Tooltip>
             </div>
           )}
-          <MembersList members={board.members} />
+          {board.members && <MembersList members={board.members} />}
         </div>
       </div>
     </div>

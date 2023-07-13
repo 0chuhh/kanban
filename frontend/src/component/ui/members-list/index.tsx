@@ -19,14 +19,16 @@ const MembersList: FC<MembersListProps> = ({ members }) => {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
             {members?.map((member) => {
               return (
-                <Tooltip title={member.user.fullname}>
+                <Tooltip title={member.user?.fullname}>
                   <Avatar
-                    key={member.user.fullname}
+                  
+                    className="members-avatar"
+                    key={member.user?.fullname}
                     style={{}}
-                    src={member.user.avatar}
+                    src={member.user?.avatar}
                   >
-                    {member.user.lastname[0].toUpperCase()}
-                    {member.user.firstname[0].toUpperCase()}{" "}
+                    {member.user?.lastname[0]?.toUpperCase()}
+                    {member.user?.firstname[0]?.toUpperCase()}{" "}
                   </Avatar>
                 </Tooltip>
               );
@@ -47,12 +49,11 @@ const MembersList: FC<MembersListProps> = ({ members }) => {
         {members?.map((member) => {
           return (
             <Avatar
-              key={member.user.fullname}
-              style={{}}
-              src={member.user.avatar}
+              key={member.user?.fullname}
+              src={member.user?.avatar}
             >
-              {member.user.lastname[0].toUpperCase()}
-              {member.user.firstname[0].toUpperCase()}{" "}
+              {member.user?.lastname[0]?.toUpperCase()}
+              {member.user?.firstname[0]?.toUpperCase()}{" "}
             </Avatar>
           );
         })}
