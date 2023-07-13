@@ -47,6 +47,13 @@ class ColumnView(viewsets.ViewSet):
         serializer = ColumnSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        serializer = ColumnSerializer(data=data)
+        if serializer.is_valid():
+            column = Column(**serializer.data)
+            column.save()
+
     @action(detail=True, methods=['patch'], url_path=r'swap')
     def swap_columns(self, request, pk=None):
         data = request.data

@@ -5,7 +5,6 @@ import {
 import { IColumn } from "models/IColumn";
 import React, { FC, useMemo } from "react";
 import Column from "./column";
-import { Button } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
 interface ColumnListProps {
@@ -16,11 +15,18 @@ const ColumnList: FC<ColumnListProps> = ({ columns }) => {
     () => columns.map((column) => column.title),
     [columns]
   );
+
+  const createColumn = () => {
+    const columnMaxPosition = columns.reduce((prev, current) => (prev.position > current.position) ? prev : current);
+    console.log(columnMaxPosition)
+  }
   return (
     <SortableContext strategy={horizontalListSortingStrategy} items={columnIds}>
+
+      
       <div className="column-list" style={{ gap: "10px", minWidth:'1200px', alignItems:'flex-start', height: "100%" }}>
       
-      <div className="add-column column h-center v-center">
+      <div onClick={createColumn} className="add-column column h-center v-center">
       <div className="h-center v-center" style={{
         color:'#fff'
       }}><AddIcon/> Добавить раздел</div>
