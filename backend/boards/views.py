@@ -41,6 +41,7 @@ class BoardView(viewsets.ModelViewSet):
     
 
 class ColumnView(viewsets.ViewSet):
+
     
     def retrieve(self, request, pk=None):
         queryset = Column.objects.filter(board__id=pk).order_by('position')
@@ -62,6 +63,14 @@ class ColumnView(viewsets.ViewSet):
             column.save()
             return Response({**serializer.data, 'id':column.id})
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    def partial_update(self, request, pk=None):
+        data = request.data
+        column = Column.objects.get(pk=pk)
+        column.title = data['title']
+        column.color = data['color']
+        column.save()
+        return Response(status=status.HTTP_200_OK)
         
 
     @action(detail=True, methods=['patch'], url_path=r'swap')

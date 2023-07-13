@@ -26,10 +26,16 @@ const DragAndDrop = () => {
   const id = useParams<string>().id;
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {activationConstraint: {
+      distance: 10,
+    },}),
     useSensor(KeyboardSensor),
-    useSensor(TouchSensor),
-    useSensor(MouseSensor),
+    useSensor(TouchSensor,{activationConstraint: {
+      distance: 10,
+    },}),
+    useSensor(MouseSensor,{activationConstraint: {
+      distance: 10,
+    },}),
   );
 
   const [columns, setColumns] = useState<IColumn[]>([]);
@@ -200,6 +206,16 @@ const DragAndDrop = () => {
   const changeTaskPosition = async (id:string | number, columnId: string | number, position:number) => {
     await api.tasks.changeTaskPositionById(id, columnId, position)
   }
+
+  const onChangeColumn = (column:IColumn) => {
+    setColumns(prev=>prev.map(c=>
+      c.id === column.id
+      ?
+      {...c, color:column.color, title:column.title}
+      :
+      c
+    ))
+  }
   useEffect(() => {
     if (id) getColumnsByBoardId(id);
   }, [id]);
@@ -212,7 +228,7 @@ const DragAndDrop = () => {
       onDragOver={handleDragOver}
       sensors={sensors}
     >
-      <ColumnList onCreateColumn={(column)=>setColumns(prev=>[...prev, column])} boardId={id} columns={columns} />
+      <ColumnList onEditColumn={onChangeColumn}  onCreateColumn={(column)=>setColumns(prev=>[...prev, column])} boardId={id} columns={columns} />
       <Overlay selectedColumn={selectedColumn} selectedTask={selectedTask} />
     </DndContext>
   );

@@ -23,7 +23,6 @@ export const useContrastColor = (hex: string) => {
 
     useEffect(() => {
         const luminence = computeLuminence(hex)
-        console.log(luminence, hex)
 
         if (luminence > 160.0 || luminence === 0) {
             setContrastColor('#000')

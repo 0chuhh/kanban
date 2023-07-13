@@ -25,7 +25,7 @@ const Task: FC<TaskProps> = ({ task, columnId }) => {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style} onClick={()=>{console.log('hello task')}} {...attributes} {...listeners}>
       <div className="task">
         <span><IconCheckbox classes={{
           root:'checkbox'

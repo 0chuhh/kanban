@@ -7,11 +7,14 @@ import { IColumn } from "models/IColumn";
 import { useContrastColor } from "hooks/useContrastColor";
 import Task from "./task-list/task";
 import TaskList from "./task-list";
+import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import { IconButton } from "@mui/material";
 
 interface ColumnProps {
   column: IColumn;
+  onEditClick?:(column:IColumn)=>void;
 }
-const Column: FC<ColumnProps> = ({ column }) => {
+const Column: FC<ColumnProps> = ({ column, onEditClick }) => {
   const contrastColor = useContrastColor(column?.color);
   const {
     setNodeRef,
@@ -29,21 +32,23 @@ const Column: FC<ColumnProps> = ({ column }) => {
     cursor: isDragging? 'grabbing':'grab'
   };
 
-
   return (
     <div ref={setNodeRef} style={style}>
       <div className="column" {...attributes}>
         <div
           className="column-head"
+          {...listeners}
+          onKeyDown={()=>{console.log('d')}}
           onClick={(e)=>{
             e.stopPropagation()
             e.preventDefault()
-            
+            onEditClick&&onEditClick(column)
           }}
-          {...listeners}
           style={{ backgroundColor: column.color, color: contrastColor,  }}
         >
-          {column.title}
+          <IconButton 
+           style={{color:contrastColor, cursor:'pointer'}}><MoreHorizOutlinedIcon/></IconButton>
+          <div style={{marginRight:"30px", width:'100%'}}>{column.title}</div>
         </div>
         <div
           className="items"
