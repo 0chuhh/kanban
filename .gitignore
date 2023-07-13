@@ -19,6 +19,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+*media/
 lib64/
 parts/
 sdist/
@@ -119,3 +120,4 @@ docker-compose.override.yml
 # Generic data directories
 .data/
 data/
+backend/.env.example
