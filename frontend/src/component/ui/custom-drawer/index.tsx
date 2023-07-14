@@ -1,21 +1,32 @@
-import React, { FC } from 'react'
+import React, { FC } from "react";
 import { Box, Drawer, DrawerProps } from "@mui/material";
-
-
-const CustomDrawer:FC<Omit<DrawerProps, 'anchor'>> = ({children, ...restProps}) => {
+interface CustomDrawerProps extends DrawerProps{
+  width?:string
+}
+const CustomDrawer: FC<CustomDrawerProps> = ({
+  children,
+  width,
+  anchor = "right",
+  ...restProps
+}) => {
   return (
     <Drawer
-        {...restProps}
-        anchor="right"
-        classes={{
-          paper:'drawer',
-          ...restProps.classes
-        }}
-      >
-        <Box sx={{height:'100%', p:3, boxSizing:'border-box'}}>{children}
-        </Box>
+      {...restProps}
+      anchor={anchor}
+      sx={{
+        width:width,
+        ...restProps.sx
+      }}
+      classes={{
+        paper: "drawer",
+        ...restProps.classes,
+      }}
+    >
+      <Box sx={{ width:width, height: "100%", p: 3, boxSizing: "border-box" }}>
+        {children}
+      </Box>
     </Drawer>
-  )
-}
+  );
+};
 
-export default CustomDrawer
+export default CustomDrawer;

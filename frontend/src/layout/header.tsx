@@ -65,7 +65,7 @@ function Header() {
 
   if (user)
     return (
-      <AppBar position="fixed" style={{ backgroundColor: "#252525" }}>
+      <AppBar position="fixed" sx={{zIndex:1300}} style={{ backgroundColor: "#252525", }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1,  }}>

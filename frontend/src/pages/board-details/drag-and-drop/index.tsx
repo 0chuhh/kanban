@@ -27,18 +27,18 @@ const DragAndDrop = () => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 10,
+        distance: 5,
       },
     }),
     useSensor(KeyboardSensor),
     useSensor(TouchSensor, {
       activationConstraint: {
-        distance: 10,
+        distance: 5,
       },
     }),
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 10,
+        distance: 5,
       },
     })
   );
