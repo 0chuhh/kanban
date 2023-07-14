@@ -22,7 +22,7 @@ const CustomDrawer: FC<CustomDrawerProps> = ({
         ...restProps.classes,
       }}
     >
-      <Box sx={{ width:width, height: "100%", p: 3, boxSizing: "border-box" }}>
+      <Box sx={{ overflow:'hidden', width:width, height: "100%", p: 3, boxSizing: "border-box" }}>
         {children}
       </Box>
     </Drawer>
