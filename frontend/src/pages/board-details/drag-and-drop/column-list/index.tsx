@@ -14,8 +14,9 @@ interface ColumnListProps {
   boardId?: string;
   onCreateColumn?:(column:IColumn)=>void;
   onEditColumn?:(column:IColumn)=>void;
+  onDeleteColumn?:(id:number|string)=>void;
 }
-const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onEditColumn }) => {
+const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onEditColumn, onDeleteColumn }) => {
   const [selectedColumnTitle,setSelectedColumnTitle] = useState<string>('')
   const [selectedColumnColor,setSelectedColumnColor] = useState<string>('#fff')
  
@@ -70,6 +71,8 @@ const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onE
     drawerRef.current?.closeDrawer()
   }
   
+  
+
   const drawerSubmit = useCallback((title:string, color:string, initTitle?:string)=>{
     if(selectedColumnColor.length && selectedColumnTitle.length && initTitle?.length) editColumn(title, color, initTitle)
     else createColumn(title, color)
@@ -90,7 +93,7 @@ const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onE
         </div>
 
         {columns.map((column) => (
-          <Column onEditClick={openEditColumnDrawer} key={column.title} column={column} />
+          <Column onDelete={onDeleteColumn} onEditClick={openEditColumnDrawer} key={column.title} column={column} />
         ))}
       </div>
     </SortableContext>

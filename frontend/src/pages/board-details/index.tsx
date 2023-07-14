@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 
 const BoardDetails = () => {
   return (
-    <div className="container">
+    <div className="container" style={{display:'grid'}}>
         <DragAndDrop/>
 
       </div>

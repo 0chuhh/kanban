@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useMemo, useState } from "react";
 import {
   useSortable,
 } from "@dnd-kit/sortable";
@@ -9,12 +9,18 @@ import Task from "./task-list/task";
 import TaskList from "./task-list";
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import { IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteConfirm from "component/modules/delete-confirm";
+import api from "services/api";
 
 interface ColumnProps {
   column: IColumn;
   onEditClick?:(column:IColumn)=>void;
+  onDelete?:(id:number|string)=>void;
 }
-const Column: FC<ColumnProps> = ({ column, onEditClick }) => {
+const Column: FC<ColumnProps> = ({ column, onEditClick, onDelete }) => {
+  const [openConfim, setOpenConfirm] = useState<boolean>(false)
+
   const contrastColor = useContrastColor(column?.color);
   const {
     setNodeRef,
@@ -32,23 +38,37 @@ const Column: FC<ColumnProps> = ({ column, onEditClick }) => {
     cursor: isDragging? 'grabbing':'grab'
   };
 
+  const onDeleteClick = () => {
+    setOpenConfirm(true)
+  }
+  const deleteColumn = () => {
+    api.columns.deleteColumn(Number(column.id))
+    onDelete && onDelete(Number(column.id))
+    setOpenConfirm(false)
+  }
   return (
     <div ref={setNodeRef} style={style}>
-      <div className="column" {...attributes}>
+      <DeleteConfirm
+        open={openConfim}
+        handleClose={()=>setOpenConfirm(false)}
+        onConfirm={deleteColumn}
+      />
+      <div className="column" >
         <div
           className="column-head"
-          {...listeners}
+          {...listeners}{...attributes}
           onKeyDown={()=>{console.log('d')}}
-          onClick={(e)=>{
+          
+          style={{ backgroundColor: column.color, color: contrastColor,  }}
+        >
+          <IconButton onClick={(e)=>{
             e.stopPropagation()
             e.preventDefault()
             onEditClick&&onEditClick(column)
           }}
-          style={{ backgroundColor: column.color, color: contrastColor,  }}
-        >
-          <IconButton 
            style={{color:contrastColor, cursor:'pointer'}}><MoreHorizOutlinedIcon/></IconButton>
-          <div style={{marginRight:"30px", width:'100%'}}>{column.title}</div>
+          <div style={{marginRight:"25px", width:'100%'}}>{column.title}</div>
+          <div><IconButton style={{color:contrastColor, cursor:'pointer'}} onClick={onDeleteClick}><DeleteIcon/></IconButton></div>
         </div>
         <div
           className="items"

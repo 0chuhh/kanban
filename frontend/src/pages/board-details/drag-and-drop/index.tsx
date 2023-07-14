@@ -1,16 +1,15 @@
-
 import {
-    DndContext,
-    DragEndEvent,
-    DragOverEvent,
-    DragStartEvent,
-    KeyboardSensor,
-    MouseSensor,
-    PointerSensor,
-    TouchSensor,
-    useSensor,
-    useSensors,
-  } from "@dnd-kit/core";
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+  KeyboardSensor,
+  MouseSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { IColumn } from "models/IColumn";
 import { ITask } from "models/ITask";
@@ -26,16 +25,22 @@ const DragAndDrop = () => {
   const id = useParams<string>().id;
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {activationConstraint: {
-      distance: 10,
-    },}),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
     useSensor(KeyboardSensor),
-    useSensor(TouchSensor,{activationConstraint: {
-      distance: 10,
-    },}),
-    useSensor(MouseSensor,{activationConstraint: {
-      distance: 10,
-    },}),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    })
   );
 
   const [columns, setColumns] = useState<IColumn[]>([]);
@@ -135,7 +140,11 @@ const DragAndDrop = () => {
           return column;
         })
       );
-      changeTaskPosition(Number(selectedTask?.id), overColumnID, Number(overIndex))
+      changeTaskPosition(
+        Number(selectedTask?.id),
+        overColumnID,
+        Number(overIndex)
+      );
     }
   }
 
@@ -174,7 +183,11 @@ const DragAndDrop = () => {
               return column;
             })
           );
-          changeTaskPosition(selectedTask.id, Number(overColumnID), Number(overIndex))
+          changeTaskPosition(
+            selectedTask.id,
+            Number(overColumnID),
+            Number(overIndex)
+          );
         }
       }
       //*
@@ -189,9 +202,9 @@ const DragAndDrop = () => {
         setColumns((columns) => {
           return arrayMove(columns, oldIndex, newIndex);
         });
-        if(selectedColumn){
-            console.log(selectedColumn?.id, newIndex)
-            changeColumnPosition(Number(selectedColumn?.id), newIndex)
+        if (selectedColumn) {
+          console.log(selectedColumn?.id, newIndex);
+          changeColumnPosition(Number(selectedColumn?.id), newIndex);
         }
       }
     }
@@ -199,23 +212,30 @@ const DragAndDrop = () => {
     //====if dropped column====//
   }
 
-  const changeColumnPosition = async (id:string | number, position:number) => {
-    await api.columns.changeColumnPositionById(id, position)
-  }
+  const changeColumnPosition = async (
+    id: string | number,
+    position: number
+  ) => {
+    await api.columns.changeColumnPositionById(id, position);
+  };
 
-  const changeTaskPosition = async (id:string | number, columnId: string | number, position:number) => {
-    await api.tasks.changeTaskPositionById(id, columnId, position)
-  }
+  const changeTaskPosition = async (
+    id: string | number,
+    columnId: string | number,
+    position: number
+  ) => {
+    await api.tasks.changeTaskPositionById(id, columnId, position);
+  };
 
-  const onChangeColumn = (column:IColumn) => {
-    setColumns(prev=>prev.map(c=>
-      c.id === column.id
-      ?
-      {...c, color:column.color, title:column.title}
-      :
-      c
-    ))
-  }
+  const onChangeColumn = (column: IColumn) => {
+    setColumns((prev) =>
+      prev.map((c) =>
+        c.id === column.id
+          ? { ...c, color: column.color, title: column.title }
+          : c
+      )
+    );
+  };
   useEffect(() => {
     if (id) getColumnsByBoardId(id);
   }, [id]);
@@ -228,7 +248,13 @@ const DragAndDrop = () => {
       onDragOver={handleDragOver}
       sensors={sensors}
     >
-      <ColumnList onEditColumn={onChangeColumn}  onCreateColumn={(column)=>setColumns(prev=>[...prev, column])} boardId={id} columns={columns} />
+      <ColumnList
+        onEditColumn={onChangeColumn}
+        onCreateColumn={(column) => setColumns((prev) => [...prev, column])}
+        onDeleteColumn={(id)=> setColumns(prev=>prev.filter(c=>c.id !== id))}
+        boardId={id}
+        columns={columns}
+      />
       <Overlay selectedColumn={selectedColumn} selectedTask={selectedTask} />
     </DndContext>
   );

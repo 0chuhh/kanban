@@ -45,9 +45,10 @@ function Login() {
           flexDirection: "column",
           gap: "20px",
           padding: "20px",
+          backgroundColor:'#212121'
         }}
       >
-        <Typography variant={"h5"}>Авторизация</Typography>
+        <Typography color={"#fff"} variant={"h5"}>Авторизация</Typography>
 
         <form
           onSubmit={signIn}

@@ -167,11 +167,12 @@
 }
 .column{
   min-width: 280px;
+  max-width: 300px;
   height: 80vh;
   border-radius: 15px;
   background-color: #3a3a3a;
   position: relative;
-  touch-action: none;
+  touch-action: cross-slide-x;
 }
 .column-head{
   position: absolute;
@@ -182,6 +183,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  touch-action: none;
 }
 
 .task-list{
