@@ -213,3 +213,13 @@
 .color-picker{
   box-sizing: border-box !important;
 }
+.user{
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 5px;
+  transition: all 0.5s ease;
+  border-radius: 5px;
+}
+.user:hover{
+  background-color: #9d2d3a;
+}

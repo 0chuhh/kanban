@@ -9,6 +9,8 @@ import api from "services/api";
 import Gap from "component/ui/gap";
 import MembersList from "component/ui/members-list";
 import CustomModal from "component/ui/custom-modal";
+import CustomInput from "component/ui/custom-input";
+import SearchUser from "component/modules/search-user";
 const BoardDrawer = () => {
   const id = useParams<string>().id;
   const size = useWindowSize();
@@ -46,7 +48,7 @@ const BoardDrawer = () => {
         <ArrowBackIosRoundedIcon htmlColor="#fff" />
       </IconButton>
         <CustomModal open={openChooseMember} handleClose={()=>setOpenChooseMember(false)}>
-
+          <SearchUser/>
         </CustomModal>
       <CustomDrawer
         width={open ? "340px" : "0px"}

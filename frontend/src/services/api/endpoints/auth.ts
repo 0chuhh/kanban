@@ -14,6 +14,7 @@ const endpoints = {
         headers:{
             'Content-Type':'application/json'
         }
-    }).then(response=>response.data)
+    }).then(response=>response.data),
+    searchUser: (value:string) => axios.get<IUser[]>(`accounts/?search=${value}`).then(response=>response.data)
 }
 export default endpoints

@@ -6,11 +6,14 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.response import Response
 from .serializers import UserSerializer
+from rest_framework import filters
 
 
 class UsersView(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['first_name','middle_name','last_name','username']
     """
     me action response user by token in request
     """
