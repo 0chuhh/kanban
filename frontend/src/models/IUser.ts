@@ -3,7 +3,7 @@ interface IRole {
 }
 export interface IUser {
     userId?:number;
-    username?: string;
+    username: string;
     firstname:string;
     middlename:string;
     lastname:string;

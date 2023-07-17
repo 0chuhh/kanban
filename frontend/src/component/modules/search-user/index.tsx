@@ -63,11 +63,12 @@ const SearchUser = () => {
               <Avatar  className="members-avatar" src={parseAvatarUrl(user?.avatar)}>
                 {user?.lastname[0]?.toUpperCase()}
                 {user?.firstname[0]?.toUpperCase()}
+                {user.fullname.length<=1 && user?.username[0]?.toUpperCase()}
               </Avatar>
               <Gap variant="horizontal"/>
               
                 {user.fullname && <Typography>{user?.fullname}</Typography>}
-                {user.fullname.length<=5 && <Typography>{user?.username}</Typography>}
+                {user.fullname.length<=1 && <Typography>{user?.username}</Typography>}
               </div>
             </div>
           ))}
