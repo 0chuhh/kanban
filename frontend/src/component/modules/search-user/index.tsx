@@ -1,4 +1,5 @@
-import { Avatar, CircularProgress, Typography } from "@mui/material";
+import { Autocomplete, Avatar, CircularProgress, TextField, Typography } from "@mui/material";
+import CustomAutocomplete from "component/ui/custom-autocolplete";
 import CustomInput from "component/ui/custom-input";
 import Gap from "component/ui/gap";
 import { useDebounce } from "hooks/useDebounce";
@@ -7,19 +8,19 @@ import React, { useEffect, useState } from "react";
 import api from "services/api";
 
 const SearchUser = () => {
-  const [value, setValue] = useState<string>(" ");
+  const [value, setValue] = useState('ad');
   const [users, setUsers] = useState<IUser[]>([]);
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const debouncedValue = useDebounce(value, 500);
 
-  const handleChangeValue: React.ChangeEventHandler<HTMLInputElement> = (
-    event
+  const handleChangeValue = (
+    newValue:any
   ) => {
-    setLoading(true);
-    setUsers([]);
-    setValue(event.target.value);
+    setLoading(true)
+
+    setValue(newValue);
   };
 
   const searchUsers = async () => {
@@ -31,7 +32,7 @@ const SearchUser = () => {
         const usersList: IUser[] = await api.auth.searchUser(' ');
         setUsers(usersList);
     }
-    setLoading(false);
+    setLoading(false)
   };
 
   const parseAvatarUrl = (url?: string) => {
@@ -39,21 +40,30 @@ const SearchUser = () => {
   };
 
   useEffect(() => {
-    searchUsers();
+    searchUsers()
     console.log('serch')
   }, [debouncedValue]);
+
+  
   return (
     <>
       <Typography>Поиск пользователей</Typography>
       <Gap />
-      <CustomInput
-        value={value}
-        onChange={handleChangeValue}
-        placeholder="Найти..."
-        fullWidth
-      />
+      <Autocomplete
+      noOptionsText={'Не найдено'}
+      loading={loading}
+        inputValue={value}
+        isOptionEqualToValue={(option, value)=>value.userId === option.userId}
+        getOptionLabel={(option)=>{
+          if(option.firstname.length>0 || option.lastname.length>0)return option.fullname
+          return option.username 
+        }}
+        onInputChange={(e,value)=>handleChangeValue(value)}
+        options={users} renderInput={(params) => (
+          <TextField {...params} label="controlled" variant="standard" />
+        )}    />
       <Gap />
-      <div className="users-list h-center v-center d-column" style={{gap:'10px', maxHeight:'350px', overflowY:!loading?'auto':'hidden'}}>
+      {/* <div className="users-list h-center v-center d-column" style={{gap:'10px', maxHeight:'350px', overflowY:!loading?'auto':'hidden'}}>
         {users.length <= 0 && !loading && "Ничего не найдено"}
         {loading && <CircularProgress />}
         {users.length > 0 &&
@@ -72,7 +82,7 @@ const SearchUser = () => {
               </div>
             </div>
           ))}
-      </div>
+      </div> */}
     </>
   );
 };
