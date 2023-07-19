@@ -1,4 +1,3 @@
-import { InputBaseProps } from "@mui/material/InputBase";
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { TextFieldProps, TextFieldVariants} from "@mui/material/TextField";
@@ -51,8 +50,8 @@ const CustomInput:FC<CustomInputProps> = ({theme, maxLength, variant = 'outlined
         color: "#fff",
       }}
       
-      InputProps={{style:{color:'fff'}}}
-      inputProps={{ maxLength: maxLength ? maxLength : 500, style:{color:'#fff'} }}
+      InputProps={{style:{color:'fff'}, ...restProps.InputProps}}
+      inputProps={{ maxLength: maxLength ? maxLength : 500, style:{color:'#fff'}, ...restProps.inputProps }}
     />
   );
 }

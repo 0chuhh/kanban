@@ -1,89 +1,74 @@
-import { Autocomplete, Avatar, CircularProgress, TextField, Typography } from "@mui/material";
-import CustomAutocomplete from "component/ui/custom-autocolplete";
+import {
+  Autocomplete,
+  createFilterOptions,
+  Avatar,
+  Typography,
+} from "@mui/material";
 import CustomInput from "component/ui/custom-input";
 import Gap from "component/ui/gap";
-import { useDebounce } from "hooks/useDebounce";
+import { useSearchableList } from "hooks/useSearchableList";
 import { IUser } from "models/IUser";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import api from "services/api";
 
 const SearchUser = () => {
-  const [value, setValue] = useState('ad');
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [value, setValue] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [users, loading] = useSearchableList<IUser>(
+    value,
+    api.auth.searchUser,
+    []
+  );
 
-  const debouncedValue = useDebounce(value, 500);
+  const filterOptions = createFilterOptions({
+    matchFrom: "any",
+    stringify: (option: IUser) => option.fullname + option.username,
+  });
 
-  const handleChangeValue = (
-    newValue:any
-  ) => {
-    setLoading(true)
-
+  const handleChangeValue = (newValue: any) => {
     setValue(newValue);
-  };
-
-  const searchUsers = async () => {
-    const searchableValue = `${value[0]?.toUpperCase()}${value?.slice(1)}`
-    if(value !== undefined){
-        const usersList: IUser[] = await api.auth.searchUser(searchableValue);
-        setUsers(usersList);
-    }else{
-        const usersList: IUser[] = await api.auth.searchUser(' ');
-        setUsers(usersList);
-    }
-    setLoading(false)
   };
 
   const parseAvatarUrl = (url?: string) => {
     return url?.slice(15);
   };
-
-  useEffect(() => {
-    searchUsers()
-    console.log('serch')
-  }, [debouncedValue]);
-
-  
   return (
-    <>
+    <div>
       <Typography>Поиск пользователей</Typography>
       <Gap />
       <Autocomplete
-      noOptionsText={'Не найдено'}
-      loading={loading}
+        fullWidth
+        noOptionsText={"Не найдено"}
+        loading={loading}
         inputValue={value}
-        isOptionEqualToValue={(option, value)=>value.userId === option.userId}
-        getOptionLabel={(option)=>{
-          if(option.firstname.length>0 || option.lastname.length>0)return option.fullname
-          return option.username 
+        filterOptions={filterOptions}
+        isOptionEqualToValue={(option, value) => value.userId === option.userId}
+        getOptionLabel={(option) => {
+          if (option.fullname.length > 0) return option.fullname;
+          return option.username;
         }}
-        onInputChange={(e,value)=>handleChangeValue(value)}
-        options={users} renderInput={(params) => (
-          <TextField {...params} label="controlled" variant="standard" />
-        )}    />
+        onInputChange={(e, value) => handleChangeValue(value)}
+        renderOption={(props, option: IUser) => (
+          <li {...props}>
+            <Avatar
+              key={"user" + option.userId}
+              src={parseAvatarUrl(option?.avatar)}
+              className="members-avatar"
+            >
+              {option?.lastname[0]?.toUpperCase()}
+              {option?.firstname[0]?.toUpperCase()}
+            </Avatar>
+            <Gap variant="horizontal" />
+            {option.fullname}&nbsp;-&nbsp;{option.username}
+          </li>
+        )}
+        options={users}
+        renderInput={(params) => {
+          return <CustomInput {...params} placeholder="Найти..." />;
+        }}
+      />
       <Gap />
-      {/* <div className="users-list h-center v-center d-column" style={{gap:'10px', maxHeight:'350px', overflowY:!loading?'auto':'hidden'}}>
-        {users.length <= 0 && !loading && "Ничего не найдено"}
-        {loading && <CircularProgress />}
-        {users.length > 0 &&
-          users.map((user) => (
-            <div key={"user" + user.userId} className="user w-100">
-              <div className="v-center w-100">
-              <Avatar  className="members-avatar" src={parseAvatarUrl(user?.avatar)}>
-                {user?.lastname[0]?.toUpperCase()}
-                {user?.firstname[0]?.toUpperCase()}
-                {user.fullname.length<=1 && user?.username[0]?.toUpperCase()}
-              </Avatar>
-              <Gap variant="horizontal"/>
-              
-                {user.fullname && <Typography>{user?.fullname}</Typography>}
-                {user.fullname.length<=1 && <Typography>{user?.username}</Typography>}
-              </div>
-            </div>
-          ))}
-      </div> */}
-    </>
+    </div>
   );
 };
 
