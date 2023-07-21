@@ -7,10 +7,8 @@ import { useParams } from "react-router";
 import { IBoard } from "models/IBoard";
 import api from "services/api";
 import Gap from "component/ui/gap";
-import MembersList from "component/ui/members-list";
-import CustomModal from "component/ui/custom-modal";
-import CustomInput from "component/ui/custom-input";
-import SearchUser from "component/modules/search-user";
+import InviteUserModal from "./invite-user-modal";
+
 const BoardDrawer = () => {
   const id = useParams<string>().id;
   const size = useWindowSize();
@@ -47,9 +45,10 @@ const BoardDrawer = () => {
       >
         <ArrowBackIosRoundedIcon htmlColor="#fff" />
       </IconButton>
-        <CustomModal open={openChooseMember} handleClose={()=>setOpenChooseMember(false)}>
-          <SearchUser/>
-        </CustomModal>
+      <InviteUserModal
+        open={openChooseMember}
+        handleClose={() => setOpenChooseMember(false)}
+      />
       <CustomDrawer
         width={open ? "340px" : "0px"}
         anchor="left"
@@ -74,24 +73,32 @@ const BoardDrawer = () => {
         <Typography color={"#fff"} align="justify" variant="h6">
           Участники:
         </Typography>
-        <div style={{
-            display:'flex',
-            flexWrap:'wrap',
-            maxHeight:'200px',
-            overflow:'auto'
-        }}>
-            {board?.members.map((member) => (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            maxHeight: "200px",
+            overflow: "auto",
+          }}
+        >
+          {board?.members.map((member) => (
             <Avatar
-                key={'member'+member.user.userId}
-                className="members-avatar"
+              key={"member" + member.user.userId}
+              className="members-avatar"
             >
-                {member.user?.lastname[0]?.toUpperCase()}
-                {member.user?.firstname[0]?.toUpperCase()}
+              {member.user?.lastname[0]?.toUpperCase()}
+              {member.user?.firstname[0]?.toUpperCase()}
             </Avatar>
-            ))}
+          ))}
         </div>
-        <Gap/>
-        <Button onClick={()=>setOpenChooseMember(true)} variant="contained" fullWidth>Добавить участника</Button>
+        <Gap />
+        <Button
+          onClick={() => setOpenChooseMember(true)}
+          variant="contained"
+          fullWidth
+        >
+          Добавить участника
+        </Button>
       </CustomDrawer>
     </>
   );

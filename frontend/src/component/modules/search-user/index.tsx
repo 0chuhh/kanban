@@ -8,10 +8,14 @@ import CustomInput from "component/ui/custom-input";
 import Gap from "component/ui/gap";
 import { useSearchableList } from "hooks/useSearchableList";
 import { IUser } from "models/IUser";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import api from "services/api";
 
-const SearchUser = () => {
+interface SearchUserProps{
+  onSelectUser:(user:IUser)=>void
+}
+
+const SearchUser:FC<SearchUserProps> = ({onSelectUser}) => {
   const [value, setValue] = useState("");
 
   const [users, loading] = useSearchableList<IUser>(
@@ -41,6 +45,7 @@ const SearchUser = () => {
         noOptionsText={"Не найдено"}
         loading={loading}
         inputValue={value}
+        onChange={(e,option)=>option && onSelectUser(option)}
         filterOptions={filterOptions}
         isOptionEqualToValue={(option, value) => value.userId === option.userId}
         getOptionLabel={(option) => {
