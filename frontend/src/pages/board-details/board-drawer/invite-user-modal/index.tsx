@@ -13,25 +13,36 @@ interface InviteUserModalProps {
   open: boolean;
   handleClose: () => void;
   members?: IUser[],
-  onMemberKick: (userId:number)=>void
+  onMemberAdd: (user: IUser) => void,
+  onMemberKick: (userId: number) => void,
 }
-const InviteUserModal: FC<InviteUserModalProps> = ({ open, handleClose, members, onMemberKick }) => {
+const InviteUserModal: FC<InviteUserModalProps> = ({ open, handleClose, members, onMemberAdd, onMemberKick }) => {
   const id = useParams<string>().id;
   const [selectedUser, setSelectedUser] = useState<IUser>()
 
-  const kickUser = async (userId?:number) => {
-    if(userId){
+  const addUser = async (user?: IUser) => {
+    if (user) {
+      await api.boardMembers.addMember(Number(id), Number(user.userId))
+      onMemberAdd(user)
+    }
+  }
+
+
+  const kickUser = async (userId?: number) => {
+    if (userId) {
       await api.boardMembers.kickMember(Number(id), Number(userId))
       onMemberKick(Number(userId))
     }
   }
+
+
   return (
     <CustomModal
       open={open}
       handleClose={handleClose}
     >
       <SearchUser onSelectUser={setSelectedUser} />
-      <Button variant="contained" fullWidth>Добавить</Button>
+      <Button onClick={()=>addUser(selectedUser)} variant="contained" fullWidth>Добавить</Button>
       <Gap />
       <div>
         <Typography>Текущие участники</Typography>
@@ -40,17 +51,17 @@ const InviteUserModal: FC<InviteUserModalProps> = ({ open, handleClose, members,
             members?.map(member =>
               <div className="v-center jc-between">
                 <div className="v-center">
-                <Avatar
-                  key={"member" + member.userId}
-                  className="members-avatar"
-                >
-                  {member?.lastname[0]?.toUpperCase()}
-                  {member?.firstname[0]?.toUpperCase()}
-                </Avatar>
-                <Gap variant="horizontal"/>
-                <div className="fullname">{member.fullname}</div>
+                  <Avatar
+                    key={"member" + member.userId}
+                    className="members-avatar"
+                  >
+                    {member?.lastname[0]?.toUpperCase()}
+                    {member?.firstname[0]?.toUpperCase()}
+                  </Avatar>
+                  <Gap variant="horizontal" />
+                  <div className="fullname">{member.fullname}</div>
                 </div>
-                <IconButton onClick={()=>kickUser(member?.userId)} title="выгнать" ><DeleteIcon htmlColor="red"/></IconButton>
+                <IconButton onClick={() => kickUser(member?.userId)} title="выгнать" ><DeleteIcon htmlColor="red" /></IconButton>
               </div>
             )
           }

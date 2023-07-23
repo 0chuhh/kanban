@@ -8,6 +8,7 @@ import { IBoard } from "models/IBoard";
 import api from "services/api";
 import Gap from "component/ui/gap";
 import InviteUserModal from "./invite-user-modal";
+import { IUser } from "models/IUser";
 
 const BoardDrawer = () => {
   const id = useParams<string>().id;
@@ -27,12 +28,17 @@ const BoardDrawer = () => {
     }
   }, [size]);
 
+  const onMemberAdd = (user:IUser)=>{
+    setBoard(prev=>{
+      if(prev) return {...prev, members:[...prev?.members, user]}
+    })
+  }
+
   const onMemberKick = (userId:Number)=>{
     setBoard(prev=>{
       if(prev) return {...prev, members:prev?.members.filter(m=>m.userId !== userId)}
     })
   }
-
   
   useEffect(() => {
     getBoard();
@@ -55,6 +61,7 @@ const BoardDrawer = () => {
         <ArrowBackIosRoundedIcon htmlColor="#fff" />
       </IconButton>
       <InviteUserModal
+      onMemberAdd={onMemberAdd}
       onMemberKick={onMemberKick}
         members={board?.members}
         open={openChooseMember}
