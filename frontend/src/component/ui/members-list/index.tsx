@@ -1,10 +1,10 @@
-import { IMember } from "models/IMember";
 import { Avatar, AvatarGroup, Tooltip, Typography } from "@mui/material";
+import { IUser } from "models/IUser";
 
 import React, { FC } from "react";
 
 interface MembersListProps {
-  members: IMember[];
+  members: IUser[];
 }
 const MembersList: FC<MembersListProps> = ({ members }) => {
   return (
@@ -19,15 +19,15 @@ const MembersList: FC<MembersListProps> = ({ members }) => {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
             {members?.map((member) => {
               return (
-                <Tooltip key={member.user.username+'tooltip'} title={member.user?.fullname}>
+                <Tooltip key={member.username+'tooltip'} title={member?.fullname}>
                   <Avatar
                   
                     className="members-avatar"
                     
-                    src={member.user?.avatar}
+                    src={member.avatar}
                   >
-                    {member.user?.lastname[0]?.toUpperCase()}
-                    {member.user?.firstname[0]?.toUpperCase()}{" "}
+                    {member?.lastname[0]?.toUpperCase()}
+                    {member?.firstname[0]?.toUpperCase()}{" "}
                   </Avatar>
                 </Tooltip>
               );
@@ -47,11 +47,11 @@ const MembersList: FC<MembersListProps> = ({ members }) => {
       >
         {members?.map((member) => 
             <Avatar
-              key={member.user.userId}
-              src={member.user?.avatar}
+              key={member.userId}
+              src={member?.avatar}
             >
-              {member.user?.lastname[0]?.toUpperCase()}
-              {member.user?.firstname[0]?.toUpperCase()}{" "}
+              {member?.lastname[0]?.toUpperCase()}
+              {member?.firstname[0]?.toUpperCase()}{" "}
             </Avatar>
          )}
       </AvatarGroup>

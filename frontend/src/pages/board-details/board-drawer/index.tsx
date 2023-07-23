@@ -27,9 +27,18 @@ const BoardDrawer = () => {
     }
   }, [size]);
 
+  const onMemberKick = (userId:Number)=>{
+    setBoard(prev=>{
+      if(prev) return {...prev, members:prev?.members.filter(m=>m.userId !== userId)}
+    })
+  }
+
+  
   useEffect(() => {
     getBoard();
   }, [id]);
+
+
   return (
     <>
       <IconButton
@@ -46,6 +55,8 @@ const BoardDrawer = () => {
         <ArrowBackIosRoundedIcon htmlColor="#fff" />
       </IconButton>
       <InviteUserModal
+      onMemberKick={onMemberKick}
+        members={board?.members}
         open={openChooseMember}
         handleClose={() => setOpenChooseMember(false)}
       />
@@ -83,11 +94,11 @@ const BoardDrawer = () => {
         >
           {board?.members.map((member) => (
             <Avatar
-              key={"member" + member.user.userId}
+              key={"member" + member.userId}
               className="members-avatar"
             >
-              {member.user?.lastname[0]?.toUpperCase()}
-              {member.user?.firstname[0]?.toUpperCase()}
+              {member?.lastname[0]?.toUpperCase()}
+              {member?.firstname[0]?.toUpperCase()}
             </Avatar>
           ))}
         </div>

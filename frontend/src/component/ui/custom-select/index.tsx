@@ -1,8 +1,7 @@
 import React, { FC, PropsWithChildren } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent, SelectProps } from "@mui/material/Select";
-import { SelectInputProps } from "@mui/material/Select/SelectInput";
+import Select, { SelectProps } from "@mui/material/Select";
 
 interface CustomSelectProps extends SelectProps, PropsWithChildren {
   label?: string;

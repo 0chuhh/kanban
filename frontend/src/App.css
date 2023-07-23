@@ -223,3 +223,10 @@
 .user:hover{
   background-color: #9d2d3a;
 }
+
+.current-members{
+  background-color: #3a3a3a;
+  padding: 10px;
+  border-radius: 5px;
+  box-sizing: border-box;
+}

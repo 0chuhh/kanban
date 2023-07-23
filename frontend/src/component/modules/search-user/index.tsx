@@ -10,6 +10,7 @@ import { useSearchableList } from "hooks/useSearchableList";
 import { IUser } from "models/IUser";
 import React, { FC, useState } from "react";
 import api from "services/api";
+import { parseAvatarUrl } from "services/parseUrlAvatar";
 
 interface SearchUserProps{
   onSelectUser:(user:IUser)=>void
@@ -33,9 +34,6 @@ const SearchUser:FC<SearchUserProps> = ({onSelectUser}) => {
     setValue(newValue);
   };
 
-  const parseAvatarUrl = (url?: string) => {
-    return url?.slice(15);
-  };
   return (
     <div>
       <Typography>Поиск пользователей</Typography>
