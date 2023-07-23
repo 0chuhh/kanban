@@ -8,26 +8,15 @@ class Board(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     date_created = models.DateField(auto_now=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='создатель')
-    
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='участники', blank=True, related_name='members')
 
     def __str__(self) -> str:
-        return self.title
+        return f'{self.id} {self.title}'
 
     class Meta:
         verbose_name = 'Доска'
         verbose_name_plural = 'Доски'
 
-
-class Members(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь')
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='members')
-
-    def __str__(self) -> str:
-        return self.user.full_name
-    
-    class Meta:
-        verbose_name = 'Участник'
-        verbose_name_plural = 'Участники'
 
 
 class Status(models.Model):
@@ -68,7 +57,7 @@ class Task(models.Model):
     sabtasks = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     position = models.IntegerField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
-    performers = models.ManyToManyField(Members, blank=True)
+    performers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
 
     @property

@@ -1,17 +1,46 @@
 from django.shortcuts import render
 from rest_framework import permissions, viewsets, generics, mixins
-
+from django.db.models import Q
 from .permissions import IsOwnerOrAdmin
-from .models import Board, Column, Task, Members
+from .models import Board, Column, Task
 from .serializers import BoardSerializer, ColumnSerializer, TaskSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
+from accounts.models import User
 
 class BoardView(viewsets.ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=True, methods=['post'], url_path=r'members/kick')
+    def kick_member(self, request, pk=None):
+        data = request.data
+        board = Board.objects.get(pk=pk)
+        print(data["user_id"])
+        member = board.members.get(id=data["user_id"])
+        print(member)
+        if board.owner == request.user:
+            if member.id != request.user.id:
+                board.members.remove(member)
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response('you cant kick yourself from your project',status=status.HTTP_403_FORBIDDEN)
+        else:
+            if member.id == request.user.id:
+                board.members.remove(member)
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response('you cant kick somebody from not your your project',status=status.HTTP_403_FORBIDDEN)
+    
+    @action(detail=True, methods=['post'], url_path=r'members/add')
+    def add_member(self, request, pk=None):
+        data = request.data
+        board = Board.objects.get(pk=pk)
+        user = User.objects.get(id=data["user_id"])
+        board.members.add(user)
+        return Response(status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -19,15 +48,15 @@ class BoardView(viewsets.ModelViewSet):
         if serializer.is_valid():
             board = Board(**serializer.data, owner=request.user)
             board.save()
-            member = Members(user=request.user, board=board)
-            member.save()
+            board.members = [request.user],
+            board.save()
             return Response({**serializer.data, 'id':board.pk},status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
 
     def list(self, request, *args, **kwargs):
-        userMemberIn = Members.objects.filter(user=request.user)
-        serializer = BoardSerializer([member.board for member in userMemberIn], many=True)
+        userMemberIn = Board.objects.filter(members__in=[request.user])
+        serializer = BoardSerializer(userMemberIn, many=True)
         return Response(serializer.data)    
 
     def get_permissions(self):
