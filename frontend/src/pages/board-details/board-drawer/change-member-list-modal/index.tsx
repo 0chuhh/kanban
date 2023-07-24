@@ -16,7 +16,7 @@ interface InviteUserModalProps {
   onMemberAdd: (user: IUser) => void,
   onMemberKick: (userId: number) => void,
 }
-const InviteUserModal: FC<InviteUserModalProps> = ({ open, handleClose, members, onMemberAdd, onMemberKick }) => {
+const ChangeMemberListModal: FC<InviteUserModalProps> = ({ open, handleClose, members, onMemberAdd, onMemberKick }) => {
   const id = useParams<string>().id;
   const [selectedUser, setSelectedUser] = useState<IUser>()
 
@@ -49,7 +49,7 @@ const InviteUserModal: FC<InviteUserModalProps> = ({ open, handleClose, members,
         <div className="current-members">
           {
             members?.map(member =>
-              <div className="v-center jc-between">
+              <div key={'member'+member.userId} className="v-center jc-between">
                 <div className="v-center">
                   <Avatar
                     key={"member" + member.userId}
@@ -71,4 +71,4 @@ const InviteUserModal: FC<InviteUserModalProps> = ({ open, handleClose, members,
   );
 };
 
-export default InviteUserModal;
+export default ChangeMemberListModal;

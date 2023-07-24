@@ -100,4 +100,4 @@ const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onE
   );
 };
 
-export default ColumnList;
+export default React.memo(ColumnList);

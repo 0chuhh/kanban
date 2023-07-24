@@ -68,7 +68,7 @@ class Task(models.Model):
             return self.deadline > self.date_updated
 
     def __str__(self) -> str:
-        return self.title
+        return f'{self.id} {self.title}'
     
     class Meta:
         verbose_name = 'Задача'

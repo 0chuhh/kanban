@@ -48,7 +48,7 @@ class BoardView(viewsets.ModelViewSet):
         if serializer.is_valid():
             board = Board(**serializer.data, owner=request.user)
             board.save()
-            board.members = [request.user],
+            board.members.add(request.user)
             board.save()
             return Response({**serializer.data, 'id':board.pk},status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -163,9 +163,6 @@ class TaskView(viewsets.ModelViewSet):
                     for task in tasks_after_previous_position:
                         task.position -= 1
                         task.save()
-                
-
-        print(changeble_task.column.pk, new_column.pk,changeble_task.column == new_column )
         changeble_task.column = new_column
         changeble_task.position = new_position
         changeble_task.save()

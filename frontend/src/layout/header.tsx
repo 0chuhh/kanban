@@ -69,7 +69,7 @@ function Header() {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1,  }}>
-            <img src={logo} style={{ maxWidth: "200px" }} />
+            <Link to={'/'}><img src={logo} style={{ maxWidth: "200px" }} /></Link>
             </Box>
             
             <Box sx={{ flexGrow: 0 }}>

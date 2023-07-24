@@ -7,14 +7,14 @@ import { useParams } from "react-router";
 import { IBoard } from "models/IBoard";
 import api from "services/api";
 import Gap from "component/ui/gap";
-import InviteUserModal from "./invite-user-modal";
+import ChangeMemberListModal from "./change-member-list-modal";
 import { IUser } from "models/IUser";
 
 const BoardDrawer = () => {
   const id = useParams<string>().id;
   const size = useWindowSize();
   const [open, setOpen] = useState<boolean>(true);
-  const [openChooseMember, setOpenChooseMember] = useState<boolean>(true);
+  const [openChooseMember, setOpenChooseMember] = useState<boolean>(false);
   const [board, setBoard] = useState<IBoard>();
 
   const getBoard = async () => {
@@ -60,7 +60,7 @@ const BoardDrawer = () => {
       >
         <ArrowBackIosRoundedIcon htmlColor="#fff" />
       </IconButton>
-      <InviteUserModal
+      <ChangeMemberListModal
       onMemberAdd={onMemberAdd}
       onMemberKick={onMemberKick}
         members={board?.members}

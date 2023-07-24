@@ -230,3 +230,19 @@
   border-radius: 5px;
   box-sizing: border-box;
 }
+.comments{
+  width: 300px;
+  display: grid;
+  flex-direction: column;
+  justify-content: start;
+  gap: 20px;
+}
+.comment{
+  background-color: #fff;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+.reply{
+  margin-left: 20px;
+}

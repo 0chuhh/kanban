@@ -7,8 +7,9 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 interface TaskProps {
   task: ITask;
   columnId: number;
+  onClick?:(task:ITask)=>void;
 }
-const Task: FC<TaskProps> = ({ task, columnId }) => {
+const Task: FC<TaskProps> = ({ task, columnId, onClick=()=>{} }) => {
   const {
     setNodeRef,
     attributes,
@@ -25,7 +26,7 @@ const Task: FC<TaskProps> = ({ task, columnId }) => {
   };
 
   return (
-    <div ref={setNodeRef} style={style} onClick={()=>{console.log('hello task')}} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style} onClick={()=>{onClick(task)}} {...attributes} {...listeners}>
       <div className="task">
         <span><IconCheckbox classes={{
           root:'checkbox'
