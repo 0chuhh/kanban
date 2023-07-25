@@ -4,9 +4,9 @@ from .models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(required=False,)
+    owner = UserSerializer(required=False, read_only=True)
     class Meta:
         model = Comment
-        fields = ('__all__')
+        fields = ('id','task', 'owner', 'date_created', 'date_updated', 'text')
 
         

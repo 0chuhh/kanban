@@ -9,3 +9,7 @@ class Comment(models.Model):
     date_updated = models.DateField(null=True, blank=True)
     text = models.TextField()
     reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.id} {self.text}'
+
