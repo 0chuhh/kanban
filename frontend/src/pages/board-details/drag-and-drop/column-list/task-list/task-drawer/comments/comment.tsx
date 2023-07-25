@@ -8,9 +8,10 @@ import { parseDate } from "services/parseDate";
 interface CommentProps {
   comment: IComment;
   reply?: IUser;
+  onReply?:(comment:IComment)=>void;
 }
 
-const Comment: FC<CommentProps> = ({ comment, reply }) => {
+const Comment: FC<CommentProps> = ({ comment, reply, onReply=()=>{} }) => {
   return (
     <div className={reply ? "reply comment" : "comment"}>
       <div className="comment-header">
@@ -38,6 +39,7 @@ const Comment: FC<CommentProps> = ({ comment, reply }) => {
       <div className="comment-actions">
         {!reply && (
           <Button
+          onClick={()=>{onReply(comment)}}
             style={{
               padding: 0,
               fontSize: "12px",

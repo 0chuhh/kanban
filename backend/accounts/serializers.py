@@ -11,6 +11,19 @@ class UserSerializer(serializers.Serializer):
     lastname = serializers.CharField(max_length=100, source='last_name')
     avatar = serializers.ImageField(required=False, )
     fullname = serializers.ReadOnlyField(source='full_name')
+    
+    
     class Meta:
         model = User
         fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+    
