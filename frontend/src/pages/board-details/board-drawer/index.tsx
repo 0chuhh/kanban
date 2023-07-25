@@ -115,7 +115,7 @@ const BoardDrawer = () => {
           variant="contained"
           fullWidth
         >
-          Добавить участника
+          изменить участников
         </Button>
       </CustomDrawer>
     </>
