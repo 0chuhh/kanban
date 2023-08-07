@@ -23,7 +23,7 @@ class Status(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.name
+        return f'{self.id} {self.name}'
 
     class Meta:
         verbose_name = 'Статус'
@@ -56,7 +56,7 @@ class Task(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     sabtasks = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     position = models.IntegerField()
-    status = models.ForeignKey(Status, on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=2)
     performers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
 

@@ -38,20 +38,21 @@ interface CustomInputProps  extends Omit<TextFieldProps, 'variant'>{
     fullWidth?: boolean,
     maxLength?: number,
     variant?:TextFieldVariants,
-    theme?:'dark'|'light'
+    theme?:'dark'|'light',
+    htmlColor?:string
 }
 
-const CustomInput:FC<CustomInputProps> = ({theme, maxLength, variant = 'outlined',...restProps}) => {
+const CustomInput:FC<CustomInputProps> = ({theme, maxLength, variant = 'outlined', htmlColor = '#fff', ...restProps}) => {
   return (
     <CssTextField
       {...restProps}
       variant={variant}
       style={{
-        color: "#fff",
+        color: htmlColor,
       }}
       
-      InputProps={{style:{color:'fff'}, ...restProps.InputProps}}
-      inputProps={{ maxLength: maxLength ? maxLength : 500, style:{color:'#fff'}, ...restProps.inputProps }}
+      InputProps={{style:{color:htmlColor}, ...restProps.InputProps}}
+      inputProps={{ maxLength: maxLength ? maxLength : 500, style:{color:htmlColor}, ...restProps.inputProps }}
     />
   );
 }

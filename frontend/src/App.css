@@ -186,12 +186,18 @@
   align-items: center;
   touch-action: none;
 }
+.items{
+  display: flex;
+  flex-direction: column;
+  max-height: -webkit-fill-available;
 
+}
 .task-list{
   display: flex;
   flex-direction: column;
   padding: 0 5px;
   gap: 10px;
+  overflow: auto;
 }
 
 .task{
@@ -205,6 +211,15 @@
   box-shadow:5px 5px 5px #1a1a1a;
 }
 
+.create-task{
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.create-task:hover{
+  border-color: #fff !important;
+  color: #fff !important
+}
 
 .drawer{
   background:#252525 !important

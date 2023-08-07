@@ -9,5 +9,11 @@ const endpoints = {
         column:columnId,
         position:position
       }).then(response => response.data),
+    postTask:(title:string, column:IColumn,)=>axios.post('tasks/',{
+      title, 
+      column:column.id,
+      position:0,
+    }).then((response)=>response.data),
+    completeTask: (id: number | string) => axios.post(`tasks/${id}/complete/`)
 }
 export default endpoints

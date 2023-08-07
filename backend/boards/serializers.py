@@ -1,8 +1,13 @@
 from rest_framework import serializers
-from .models import Board, Column, Task
+from .models import Board, Column, Task, Status
 from accounts.serializers import UserSerializer
 from rest_framework.validators import UniqueValidator
 
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+        fields = '__all__'
 
 
 class BoardSerializer(serializers.ModelSerializer):
@@ -14,6 +19,7 @@ class BoardSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    status = StatusSerializer(required=False)
     def validate(self, data):
         if len(Task.objects.filter(column_id=data['column'],position=data['position']))>0:
             raise serializers.ValidationError("task with same position in this column already exists")

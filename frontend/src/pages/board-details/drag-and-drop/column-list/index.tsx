@@ -15,8 +15,9 @@ interface ColumnListProps {
   onCreateColumn?:(column:IColumn)=>void;
   onEditColumn?:(column:IColumn)=>void;
   onDeleteColumn?:(id:number|string)=>void;
+  onCreateTask:(title:string, column:IColumn)=>void;
 }
-const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onEditColumn, onDeleteColumn }) => {
+const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onEditColumn, onDeleteColumn, onCreateTask }) => {
   const [selectedColumnTitle,setSelectedColumnTitle] = useState<string>('')
   const [selectedColumnColor,setSelectedColumnColor] = useState<string>('#fff')
  
@@ -93,7 +94,7 @@ const ColumnList: FC<ColumnListProps> = ({ columns, boardId, onCreateColumn, onE
         </div>
 
         {columns.map((column) => (
-          <Column onDelete={onDeleteColumn} onEditClick={openEditColumnDrawer} key={column.title} column={column} />
+          <Column onCreateTask={onCreateTask} onDelete={onDeleteColumn} onEditClick={openEditColumnDrawer} key={column.title} column={column} />
         ))}
       </div>
     </SortableContext>

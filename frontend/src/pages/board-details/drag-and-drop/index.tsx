@@ -13,13 +13,15 @@ import {
 import { arrayMove } from "@dnd-kit/sortable";
 import { IColumn } from "models/IColumn";
 import { ITask } from "models/ITask";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import api from "services/api";
 import Task from "./column-list/task-list/task";
 import Column from "./column-list/column";
 import ColumnList from "./column-list";
 import Overlay from "./overlay";
+
+export const ColumnsContext = createContext<[columns:IColumn[],setColumns:React.Dispatch<React.SetStateAction<IColumn[]>>]>([[], ()=>{}])
 
 const DragAndDrop = () => {
   const id = useParams<string>().id;
@@ -236,6 +238,17 @@ const DragAndDrop = () => {
       )
     );
   };
+
+  const onCreateTask = async (title: string, column:IColumn) => {
+    const task:ITask = await api.tasks.postTask(title, column)
+    setColumns(prev=>prev.map(col=>
+        col.id === column.id?
+        {...col, tasks:[task, ...col.tasks.map(t=>({...t, position:t.position+=1}))]}
+        :
+        col
+      ))
+      
+  };
   useEffect(() => {
     if (id) getColumnsByBoardId(id);
   }, [id]);
@@ -248,13 +261,18 @@ const DragAndDrop = () => {
       onDragOver={handleDragOver}
       sensors={sensors}
     >
-      <ColumnList
-        onEditColumn={onChangeColumn}
-        onCreateColumn={(column) => setColumns((prev) => [...prev, column])}
-        onDeleteColumn={(id)=> setColumns(prev=>prev.filter(c=>c.id !== id))}
-        boardId={id}
-        columns={columns}
-      />
+      <ColumnsContext.Provider value={[columns, setColumns]}>
+        <ColumnList
+          onCreateTask={onCreateTask}
+          onEditColumn={onChangeColumn}
+          onCreateColumn={(column) => setColumns((prev) => [...prev, column])}
+          onDeleteColumn={(id) =>
+            setColumns((prev) => prev.filter((c) => c.id !== id))
+          }
+          boardId={id}
+          columns={columns}
+        />
+      </ColumnsContext.Provider>
       <Overlay selectedColumn={selectedColumn} selectedTask={selectedTask} />
     </DndContext>
   );

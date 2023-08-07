@@ -167,5 +167,29 @@ class TaskView(viewsets.ModelViewSet):
         changeble_task.position = new_position
         changeble_task.save()
         return Response(status=status.HTTP_200_OK)
+    
+
+    @action(detail=True, methods=['post'])
+    def complete(self, request, pk=None):
+        task = Task.objects.get(pk=pk)
+        try:
+            task.delete()
+        except:
+            ...
+        return Response(status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        existing_tasks = Task.objects.filter(column_id=data['column'])
+        task = Task(title=data['title'], column_id=data['column'], position=0)
+        if len(existing_tasks) != 0:
+            for task in existing_tasks:
+                task.position += 1
+                task.save()
+        task = Task(title=data['title'], column_id=data['column'], position=0)
+        task.save()
+        task_serializer = TaskSerializer(task)
+
+        return Response(task_serializer.data)
 
 # Create your views here.
