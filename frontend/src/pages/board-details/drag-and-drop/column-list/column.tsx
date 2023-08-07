@@ -58,6 +58,7 @@ const Column: FC<ColumnProps> = ({ column, onEditClick, onDelete, onCreateTask=(
   const createTask = () => {
     setIsCreatingTask(false)
     onCreateTask(creatingTaskValue, column)
+    setCreatingTaskValue('')
   }
   
   return (

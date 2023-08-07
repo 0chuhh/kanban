@@ -28,22 +28,25 @@ const BoardDrawer = () => {
     }
   }, [size]);
 
-  const onMemberAdd = (user:IUser)=>{
-    setBoard(prev=>{
-      if(prev) return {...prev, members:[...prev?.members, user]}
-    })
-  }
+  const onMemberAdd = (user: IUser) => {
+    setBoard((prev) => {
+      if (prev) return { ...prev, members: [...prev?.members, user] };
+    });
+  };
 
-  const onMemberKick = (userId:Number)=>{
-    setBoard(prev=>{
-      if(prev) return {...prev, members:prev?.members.filter(m=>m.userId !== userId)}
-    })
-  }
-  
+  const onMemberKick = (userId: Number) => {
+    setBoard((prev) => {
+      if (prev)
+        return {
+          ...prev,
+          members: prev?.members.filter((m) => m.userId !== userId),
+        };
+    });
+  };
+
   useEffect(() => {
     getBoard();
   }, [id]);
-
 
   return (
     <>
@@ -61,8 +64,9 @@ const BoardDrawer = () => {
         <ArrowBackIosRoundedIcon htmlColor="#fff" />
       </IconButton>
       <ChangeMemberListModal
-      onMemberAdd={onMemberAdd}
-      onMemberKick={onMemberKick}
+        onMemberAdd={onMemberAdd}
+        onMemberKick={onMemberKick}
+        owner={board?.owner}
         members={board?.members}
         open={openChooseMember}
         handleClose={() => setOpenChooseMember(false)}
@@ -100,10 +104,7 @@ const BoardDrawer = () => {
           }}
         >
           {board?.members.map((member) => (
-            <Avatar
-              key={"member" + member.userId}
-              className="members-avatar"
-            >
+            <Avatar key={"member" + member.userId} className="members-avatar">
               {member?.lastname[0]?.toUpperCase()}
               {member?.firstname[0]?.toUpperCase()}
             </Avatar>
