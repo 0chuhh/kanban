@@ -3,6 +3,7 @@ import {
   createFilterOptions,
   Avatar,
   Typography,
+  Chip,
 } from "@mui/material";
 import CustomInput from "component/ui/custom-input";
 import Gap from "component/ui/gap";
@@ -11,12 +12,16 @@ import { IUser } from "models/IUser";
 import React, { FC, useState } from "react";
 import api from "services/api";
 import { parseAvatarUrl } from "services/parseUrlAvatar";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 interface SearchUserProps{
-  onSelectUser:(user:IUser)=>void
+  onSelectUser:(user:IUser | IUser[])=>void;
+  labelColor?:string;
+  multiple?:boolean;
+  maxWidth?:string;
 }
 
-const SearchUser:FC<SearchUserProps> = ({onSelectUser}) => {
+const SearchUser:FC<SearchUserProps> = ({onSelectUser, labelColor, multiple=false, maxWidth}) => {
   const [value, setValue] = useState("");
 
   const [users, loading] = useSearchableList<IUser>(
@@ -36,9 +41,11 @@ const SearchUser:FC<SearchUserProps> = ({onSelectUser}) => {
 
   return (
     <div>
-      <Typography>Поиск пользователей</Typography>
+      <Typography color={labelColor}>Поиск пользователей</Typography>
       <Gap />
       <Autocomplete
+        disableClearable
+        multiple={multiple}
         fullWidth
         noOptionsText={"Не найдено"}
         loading={loading}
@@ -47,7 +54,7 @@ const SearchUser:FC<SearchUserProps> = ({onSelectUser}) => {
         filterOptions={filterOptions}
         isOptionEqualToValue={(option, value) => value.userId === option.userId}
         getOptionLabel={(option) => {
-          if (option.fullname.length > 0) return option.fullname;
+          if (multiple && option.fullname.length > 0) return option.fullname;
           return option.username;
         }}
         onInputChange={(e, value) => handleChangeValue(value)}
@@ -67,8 +74,15 @@ const SearchUser:FC<SearchUserProps> = ({onSelectUser}) => {
         )}
         options={users}
         renderInput={(params) => {
-          return <CustomInput {...params} placeholder="Найти..." />;
+          return <CustomInput maxWidth={maxWidth} {...params} placeholder="Найти..." />;
         }}
+        renderTags={(value: readonly IUser[], getTagProps) =>
+          value.map((option: IUser, index: number) => (
+            <Chip variant="outlined" deleteIcon={<HighlightOffIcon style={{
+              color:'#fff'
+            }} htmlColor="red"/>} style={{color:'#fff'}} label={option.username} {...getTagProps({ index })} />
+          ))
+        }
       />
       <Gap />
     </div>

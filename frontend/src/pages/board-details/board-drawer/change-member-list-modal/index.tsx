@@ -42,9 +42,15 @@ const ChangeMemberListModal: FC<InviteUserModalProps> = ({
     }
   };
 
+  const onSelectUser = (user:IUser|IUser[]) => {
+    if(!Array.isArray(user)){
+      setSelectedUser(user)
+    }
+  }
+
   return (
     <CustomModal open={open} handleClose={handleClose}>
-      <SearchUser onSelectUser={setSelectedUser} />
+      <SearchUser onSelectUser={onSelectUser} />
       <Button
         onClick={() => addUser(selectedUser)}
         variant="contained"

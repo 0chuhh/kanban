@@ -13,6 +13,8 @@ import React, {
 import api from "services/api";
 import Comment from "./comments/comment";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchUser from "component/modules/search-user";
+import { IUser } from "models/IUser";
 
 export interface CanOpenTaskDrawer {
   openDrawer(): void;
@@ -29,6 +31,7 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
     const [comments, setComments] = useState<IComment[]>([]);
     const [commentValue, setCommentValue] = useState<string>('')
     const [selectedReply, setSelectedReply] = useState<IComment | null>(null);
+    const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]) 
 
     useImperativeHandle(ref, () => ({
       openDrawer() {
@@ -81,6 +84,13 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
       setSelectedReply(comment);
     };
 
+    const onSelectUsers = (user:IUser|IUser[]) => {
+      if(Array.isArray(user)){
+        setSelectedUsers(user)
+        console.log(selectedUsers)
+      }
+    }
+
     useEffect(() => {
       if (task) setTitle(task?.title);
       getComments();
@@ -100,16 +110,22 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
         setCommentValue('')
       }
     }, [comments]);
+
+
     return (
       <CustomDrawer onClose={closeDrawer} open={open}>
         <div
-          className="h-100"
           style={{
             marginTop: "30%",
           }}
         >
-          <CustomInput value={title} label="название" />
+          <CustomInput value={title} fullWidth label="название" />
           <Gap />
+          <SearchUser multiple maxWidth="300px" labelColor="#fff" onSelectUser={onSelectUsers}/>
+          <Gap/>
+          <Button size="small" fullWidth variant="contained">Назначить</Button>
+          <Typography color={"#fff"}>Исполнители:</Typography>
+          <Gap/>
           <div className="comments-wrapper">
             <Typography color={"#fff"}>Комментарии:</Typography>
             <Gap />
