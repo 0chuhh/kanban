@@ -207,7 +207,7 @@ class TaskView(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], url_path=r'remove-performers')
     def remove_perfomers(self, request, pk=None):
         data = request.data
-        user = User.objects.get(pk=data)
+        user = User.objects.get(pk=data['userId'])
         task = Task.objects.get(pk=pk)
         task.performers.remove(user)
         return Response('ok')

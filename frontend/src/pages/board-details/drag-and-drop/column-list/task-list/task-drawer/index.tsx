@@ -117,8 +117,23 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
 
     }
 
-    const removePerformer = async () => {
-      
+    const removePerformer = async (user:IUser) => {
+      if (selectedUsers && task){
+        await api.tasks.removePerformer(Number(task?.id), Number(user.userId))
+        setColumns(prev=>prev.map(column=>(
+          column.id === task.column? {...column, tasks:
+            column.tasks.map(tmpTask=>{
+              if(
+                task.id === tmpTask.id
+              ) {
+                return {...tmpTask, performers:tmpTask.performers.filter(perf=>perf.userId!==user.userId)}
+              }
+              return tmpTask
+            })
+          } : column
+        )))
+        setSelectedUsers([])
+      }
     }
 
 
@@ -179,7 +194,7 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
               </div>
               {
                 <IconButton
-                  // onClick={() => kickUser(performer?.userId)}
+                  onClick={() => removePerformer(performer)}
                   title="удалить"
                 >
                   <DeleteIcon htmlColor="red" />
