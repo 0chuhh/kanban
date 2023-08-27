@@ -50,7 +50,7 @@ const ChangeMemberListModal: FC<InviteUserModalProps> = ({
 
   return (
     <CustomModal open={open} handleClose={handleClose}>
-      <SearchUser onSelectUser={onSelectUser} />
+      <SearchUser selectedUsers={selectedUser} onSelectUser={onSelectUser} />
       <Button
         onClick={() => addUser(selectedUser)}
         variant="contained"

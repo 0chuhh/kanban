@@ -9,25 +9,28 @@ import CustomInput from "component/ui/custom-input";
 import Gap from "component/ui/gap";
 import { useSearchableList } from "hooks/useSearchableList";
 import { IUser } from "models/IUser";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import api from "services/api";
 import { parseAvatarUrl } from "services/parseUrlAvatar";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 interface SearchUserProps{
   onSelectUser:(user:IUser | IUser[])=>void;
+  selectedUsers?:IUser[] | IUser,
   labelColor?:string;
   multiple?:boolean;
   maxWidth?:string;
+  filterFunc?: (list:IUser[])=>IUser[];
 }
 
-const SearchUser:FC<SearchUserProps> = ({onSelectUser, labelColor, multiple=false, maxWidth}) => {
+const SearchUser:FC<SearchUserProps> = ({onSelectUser, selectedUsers, labelColor, multiple=false, maxWidth, filterFunc}) => {
   const [value, setValue] = useState("");
-
+  const [selectedValue, setSelectedValue] = useState<IUser|IUser[]>()
   const [users, loading] = useSearchableList<IUser>(
     value,
     api.auth.searchUser,
-    []
+    [],
+    filterFunc
   );
 
   const filterOptions = createFilterOptions({
@@ -39,6 +42,12 @@ const SearchUser:FC<SearchUserProps> = ({onSelectUser, labelColor, multiple=fals
     setValue(newValue);
   };
 
+
+  useEffect(()=>{
+    if(selectedUsers){
+      setSelectedValue(selectedUsers)
+    }
+  },[selectedUsers])
   return (
     <div>
       <Typography color={labelColor}>Поиск пользователей</Typography>
@@ -72,6 +81,7 @@ const SearchUser:FC<SearchUserProps> = ({onSelectUser, labelColor, multiple=fals
             {option.fullname}&nbsp;-&nbsp;{option.username}
           </li>
         )}
+        value={selectedValue}
         options={users}
         renderInput={(params) => {
           return <CustomInput maxWidth={maxWidth} {...params} placeholder="Найти..." />;

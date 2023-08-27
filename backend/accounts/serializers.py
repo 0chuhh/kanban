@@ -9,7 +9,7 @@ class UserSerializer(serializers.Serializer):
     firstname = serializers.CharField(max_length=100, source='first_name')
     middlename = serializers.CharField(max_length=100, required=False, source='middle_name')
     lastname = serializers.CharField(max_length=100, source='last_name')
-    avatar = serializers.ImageField(required=False, )
+    avatar = serializers.ImageField(required=False, max_length=None, use_url=True, allow_null=True, )
     fullname = serializers.ReadOnlyField(source='full_name')
     
     

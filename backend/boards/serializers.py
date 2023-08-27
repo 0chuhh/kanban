@@ -20,6 +20,7 @@ class BoardSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     status = StatusSerializer(required=False)
+    performers = UserSerializer(required=False, many=True)
     def validate(self, data):
         if len(Task.objects.filter(column_id=data['column'],position=data['position']))>0:
             raise serializers.ValidationError("task with same position in this column already exists")

@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 from accounts.models import User
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 
 class BoardView(viewsets.ModelViewSet):
     queryset = Board.objects.all()
@@ -191,5 +194,29 @@ class TaskView(viewsets.ModelViewSet):
         task_serializer = TaskSerializer(task)
 
         return Response(task_serializer.data)
+    
+    @action(detail=True, methods=['post'], url_path=r'add-performers')
+    def add_perfomers(self, request, pk=None):
+        data = request.data
+        users = [User.objects.get(pk=user) for user in data]
+        task = Task.objects.get(pk=pk)
+        for performer in users:
+            task.performers.add(performer)
+        return Response('ok')
+    
+    @action(detail=True, methods=['post'], url_path=r'remove-performers')
+    def remove_perfomers(self, request, pk=None):
+        data = request.data
+        user = User.objects.get(pk=data)
+        task = Task.objects.get(pk=pk)
+        task.performers.remove(user)
+        return Response('ok')
+    
+
+    # def get_serializer_class(self):
+
+    #     if self.action == 'add_perfomers':
+    #         return UserSerializer
+    #     return super().get_serializer_class()
 
 # Create your views here.

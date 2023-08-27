@@ -1,4 +1,4 @@
-import { Button, IconButton, Typography } from "@mui/material";
+import { Avatar, Button, IconButton, Typography } from "@mui/material";
 import CustomDrawer from "component/ui/custom-drawer";
 import CustomInput from "component/ui/custom-input";
 import Gap from "component/ui/gap";
@@ -6,6 +6,7 @@ import { IComment } from "models/IComment";
 import { ITask } from "models/ITask";
 import React, {
   forwardRef,
+  useContext,
   useEffect,
   useImperativeHandle,
   useState,
@@ -13,8 +14,10 @@ import React, {
 import api from "services/api";
 import Comment from "./comments/comment";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import SearchUser from "component/modules/search-user";
 import { IUser } from "models/IUser";
+import { ColumnsContext } from "pages/board-details/drag-and-drop";
 
 export interface CanOpenTaskDrawer {
   openDrawer(): void;
@@ -26,12 +29,14 @@ interface TaskDrawerProps {
 }
 const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
   ({ task }, ref) => {
+
+    const [columns, setColumns] = useContext(ColumnsContext)
     const [title, setTitle] = useState<string>("");
     const [open, setOpen] = useState<boolean>(false);
     const [comments, setComments] = useState<IComment[]>([]);
     const [commentValue, setCommentValue] = useState<string>('')
     const [selectedReply, setSelectedReply] = useState<IComment | null>(null);
-    const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]) 
+    const [selectedUsers, setSelectedUsers] = useState<IUser[]>([])
 
     useImperativeHandle(ref, () => ({
       openDrawer() {
@@ -84,13 +89,43 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
       setSelectedReply(comment);
     };
 
-    const onSelectUsers = (user:IUser|IUser[]) => {
-      if(Array.isArray(user)){
+    const onSelectUsers = (user: IUser | IUser[]) => {
+      if (Array.isArray(user)) {
         setSelectedUsers(user)
         console.log(selectedUsers)
       }
     }
 
+    const addPerformers = async () => {
+      if (selectedUsers && task){
+        await api.tasks.addPerformers(Number(task?.id), selectedUsers.map(user => Number(user.userId)))
+        setColumns(prev=>prev.map(column=>(
+          column.id === task.column? {...column, tasks:
+            column.tasks.map(tmpTask=>{
+              if(
+                task.id === tmpTask.id
+              ) {
+                return {...tmpTask, performers:[...tmpTask.performers, ...selectedUsers]}
+              }
+              return tmpTask
+            })
+          } : column
+        )))
+        setSelectedUsers([])
+        closeDrawer()
+      }
+
+    }
+
+    const removePerformer = async () => {
+      
+    }
+
+
+    const filterPerformers = (list: IUser[]) => {
+      let result = list.filter(user => !task?.performers.find(performer => performer.username === user.username))
+      return result
+    }
     useEffect(() => {
       if (task) setTitle(task?.title);
       getComments();
@@ -121,11 +156,38 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
         >
           <CustomInput value={title} fullWidth label="название" />
           <Gap />
-          <SearchUser multiple maxWidth="300px" labelColor="#fff" onSelectUser={onSelectUsers}/>
-          <Gap/>
-          <Button size="small" fullWidth variant="contained">Назначить</Button>
+          <SearchUser selectedUsers={selectedUsers} filterFunc={filterPerformers} multiple maxWidth="300px" labelColor="#fff" onSelectUser={onSelectUsers} />
+          <Gap />
+          <Button size="small" fullWidth onClick={addPerformers} variant="contained">Назначить</Button>
           <Typography color={"#fff"}>Исполнители:</Typography>
-          <Gap/>
+          {columns.find(c=>c.id===task?.column)?.tasks.find(t=>t.id===task?.id)?.performers.map((performer) => (
+            <div key={"member" + performer.userId} className="v-center jc-between">
+              <div className="v-center">
+                <Avatar
+                  key={"member" + performer.userId}
+                  className="members-avatar"
+                >
+                  {performer?.lastname[0]?.toUpperCase()}
+                  {performer?.firstname[0]?.toUpperCase()}
+                </Avatar>
+                <Gap variant="horizontal" />
+                <div className="fullname"
+                  style={{ color: '#fff' }}
+                >
+                  {performer.fullname}{" "}
+                </div>
+              </div>
+              {
+                <IconButton
+                  // onClick={() => kickUser(performer?.userId)}
+                  title="удалить"
+                >
+                  <DeleteIcon htmlColor="red" />
+                </IconButton>
+              }
+            </div>
+          ))}
+          <Gap />
           <div className="comments-wrapper">
             <Typography color={"#fff"}>Комментарии:</Typography>
             <Gap />
@@ -195,7 +257,7 @@ const TaskDrawer = forwardRef<CanOpenTaskDrawer, TaskDrawerProps>(
                 multiline
                 fullWidth
                 value={commentValue}
-                onChange={(e)=>setCommentValue(e.target.value)}
+                onChange={(e) => setCommentValue(e.target.value)}
                 label="Комментарий"
               />
               <Button type="submit" fullWidth variant="contained">

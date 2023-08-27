@@ -1,5 +1,6 @@
 import { DateString } from "types/date";
 import { IColumn } from "./IColumn";
+import { IUser } from "./IUser";
 
 export interface ITask {
     id:number;
@@ -12,5 +13,5 @@ export interface ITask {
     position:number;
     subtasks:ITask[];
     status:number;
-    performers:number;
+    performers:IUser[];
 }

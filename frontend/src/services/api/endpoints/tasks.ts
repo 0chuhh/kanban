@@ -14,6 +14,8 @@ const endpoints = {
       column:column.id,
       position:0,
     }).then((response)=>response.data),
-    completeTask: (id: number | string) => axios.post(`tasks/${id}/complete/`)
+    completeTask: (id: number | string) => axios.post(`tasks/${id}/complete/`),
+    addPerformers: (id: number, users?: number[]) => axios.post(`tasks/${id}/add-performers/`, users),
+    removePerformer: (id: number, user: number) => axios.post(`tasks/${id}/remove-performers/`, user),
 }
 export default endpoints
