@@ -56,7 +56,7 @@ class Task(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     sabtasks = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     position = models.IntegerField()
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=2)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
     performers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
 

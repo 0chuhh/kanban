@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import permissions, viewsets, generics, mixins
 from django.db.models import Q
 from .permissions import IsOwnerOrAdmin
-from .models import Board, Column, Task
+from .models import Board, Column, Task, Status
 from .serializers import BoardSerializer, ColumnSerializer, TaskSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -183,6 +183,7 @@ class TaskView(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
+        status, created = Status.objects.get_or_create(name="Новый")
         existing_tasks = Task.objects.filter(column_id=data['column'])
         task = Task(title=data['title'], column_id=data['column'], position=0)
         if len(existing_tasks) != 0:
