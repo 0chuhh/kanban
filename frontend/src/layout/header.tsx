@@ -57,8 +57,6 @@ function Header() {
   useEffect(() => {
     handleCloseNavMenu();
     handleCloseUserMenu();
-    if(user)
-    console.log(user.avatar)
   }, [user]);
 
   if (user)
@@ -75,7 +73,7 @@ function Header() {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, gap: 2 }}>
                   <Avatar
                     alt="Remy Sharp"
-                    src={user.avatar}
+                    src={user?.avatar[0]}
                   />
                   <Typography sx={{display: { xs: "none", md: "flex" }}} color={"white"}>{user.fullname}</Typography>
                 </IconButton>

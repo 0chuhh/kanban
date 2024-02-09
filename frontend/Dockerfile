@@ -1,4 +1,4 @@
-FROM node:14.17.3
+FROM node:latest
 
 WORKDIR /frontend
 
@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev", "--", "--port", "3000"]

@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import api from "services/api";
 import BoardItem from "./boardItem";
 import AddIcon from "@mui/icons-material/Add";
-import CustomModal from "component/ui/custom-modal";
 import BoardModal, { CanOpenBoardModal } from "./board-modal";
 
 const BoardList = () => {
