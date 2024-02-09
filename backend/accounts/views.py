@@ -32,7 +32,7 @@ class UsersView(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.Generi
                 'fullname':user.full_name,
             }
             try:
-                response['avatar'] = user.avatar.url,
+                response['avatar'] = f'{user.avatar.url}',
             except: 
                 pass
             print(user.avatar)
