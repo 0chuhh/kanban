@@ -21,6 +21,6 @@ export default defineConfig({
     }
   },
   base: "/kanban",
-  build: { chunkSizeWarningLimit: 1600, }
+  build: { chunkSizeWarningLimit: 1600, },
   plugins: [react(),tsconfigPaths()],
 })
