@@ -20,5 +20,6 @@ export default defineConfig({
       }
     }
   },
+  base: "/kanban",
   plugins: [react(),tsconfigPaths()],
 })
