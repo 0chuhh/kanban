@@ -20,6 +20,7 @@ export default defineConfig({
       }
     }
   },
-  base: "/kanban/frontend",
+  base: "/kanban",
+  build: { chunkSizeWarningLimit: 1600, }
   plugins: [react(),tsconfigPaths()],
 })
