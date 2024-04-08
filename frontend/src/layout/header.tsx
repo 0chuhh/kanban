@@ -65,7 +65,7 @@ function Header() {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1,  }}>
-            <Link to={'/'}><img src={logo} style={{ maxWidth: "200px" }} /></Link>
+            <Link to={'/kanban'}><img src={logo} style={{ maxWidth: "200px" }} /></Link>
             </Box>
             
             <Box sx={{ flexGrow: 0 }}>

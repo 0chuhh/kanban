@@ -46,7 +46,7 @@ const BoardItem: FC<BoardItemProps> = ({ board, onDelete, onEdit }) => {
   const navigate = useNavigate();
 
   const onBoardClick = (id: number) => {
-    navigate(`/board/${id}`);
+    navigate(`/kanban/board/${id}`);
   };
 
   return (
