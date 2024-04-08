@@ -2,7 +2,6 @@
   "homepage": "0chuhh.github.io/kanban/",
   "name": "react-ts",
   "private": true,
-  "proxy": "http://lehfr21.pythonanywhere.com",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
