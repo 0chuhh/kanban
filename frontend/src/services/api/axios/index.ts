@@ -5,6 +5,7 @@ const axiosInstance = axios.create({
     baseURL: "/api/",
 });
 
+
 axiosInstance.interceptors.request.use(
     (config) => {
       const authToken = Cookies.get("token");

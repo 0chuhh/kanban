@@ -72,7 +72,7 @@ function Header() {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, gap: 2 }}>
                   <Avatar
-                    alt="Remy Sharp"
+                    alt="Remy Sharrp"
                     src={user?.avatar[0]}
                   />
                   <Typography sx={{display: { xs: "none", md: "flex" }}} color={"white"}>{user.fullname}</Typography>
