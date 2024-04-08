@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosInstance = axios.create({
-    baseURL: "/api/",
+    baseURL: "http://lehfr21.pythonanywhere.com/api/",
 });
 
 

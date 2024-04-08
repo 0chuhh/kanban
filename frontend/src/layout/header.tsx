@@ -47,7 +47,7 @@ function Header() {
 
   const logOut = () => {
     dispatch(logOutUser());
-    navigate("/login");
+    navigate("/kanban/login");
   };
 
   useEffect(() => {
