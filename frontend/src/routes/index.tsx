@@ -10,7 +10,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route
-        path="/"
+        path="/kanban"
         element={
           <PrivateRoute>
             <Home />
@@ -18,16 +18,16 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path="/board/:id"
+        path="/kanban/board/:id"
         element={
           <PrivateRoute>
             <BoardDetails />
           </PrivateRoute>
         }
       />
-      <Route path="/login" element={<Login />} />
+      <Route path="/kanban/login" element={<Login />} />
       <Route
-        path="/404"
+        path="/kanban/404"
         element={
           <PrivateRoute>
             <NotFound />
